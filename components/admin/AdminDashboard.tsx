@@ -1,18 +1,16 @@
 import { formatCurrency } from "@/lib/utils/format";
 import { GiftPaymentsTable } from "./GiftPaymentsTable";
-import type {
-  GiftPaymentRow,
-  GuestMessageRow,
-  GuestRow,
-  PaymentRow,
-} from "@/lib/supabase/types";
+import type { GiftPaymentRow, GuestMessageRow, GuestRow } from "@/lib/supabase/types";
 
 export type AdminData = {
   guests: GuestRow[];
   messages: GuestMessageRow[];
-  /** Pagamentos vindos do webhook do Mercado Pago (integração oficial) */
-  payments: PaymentRow[];
-  /** Avisos de pagamento enviados pelos próprios convidados */
+  /**
+   * Presentes comprados, avisados pelos próprios convidados.
+   *
+   * Com pagamento por link do PagBank não existe confirmação automática — quem
+   * fecha o ciclo é o casal, marcando "conferido" após bater com o extrato.
+   */
   giftPayments: GiftPaymentRow[];
 };
 
@@ -27,24 +25,21 @@ function Stat({ label, value, hint }: { label: string; value: string; hint?: str
 }
 
 /** Painel de leitura: números do RSVP, presentes comprados e mensagens. */
-export function AdminDashboard({ guests, messages, payments, giftPayments }: AdminData) {
+export function AdminDashboard({ guests, messages, giftPayments }: AdminData) {
   const confirmed = guests.filter((guest) => guest.attending);
   const declined = guests.filter((guest) => !guest.attending);
 
   const adults = confirmed.reduce((total, guest) => total + (guest.adults ?? 0), 0);
   const children = confirmed.reduce((total, guest) => total + (guest.children ?? 0), 0);
 
-  // Presentes: somamos os avisos dos convidados com os pagamentos que o
-  // webhook do Mercado Pago confirmou (quando a integração oficial está ativa).
-  const approvedPayments = payments.filter((payment) => payment.status === "approved");
-  const raisedFromWebhook = approvedPayments.reduce(
-    (total, payment) => total + Number(payment.amount ?? 0),
-    0,
-  );
+  // Os presentes são pagos por link do PagBank, então o site não recebe
+  // confirmação automática: o total vem dos avisos dos próprios convidados.
   const raisedFromGuests = giftPayments.reduce(
     (total, row) => total + Number(row.amount ?? 0),
     0,
   );
+  const checkedGifts = giftPayments.filter((row) => row.confirmed);
+  const raisedChecked = checkedGifts.reduce((total, row) => total + Number(row.amount ?? 0), 0);
 
   const giftsPendingCheck = giftPayments.filter((row) => !row.confirmed);
   const pendingMessages = messages.filter((message) => !message.approved);
@@ -72,12 +67,12 @@ export function AdminDashboard({ guests, messages, payments, giftPayments }: Adm
         <Stat
           label="Valor declarado"
           value={formatCurrency(raisedFromGuests)}
-          hint="Somatório dos avisos dos convidados"
+          hint="Somatório de todos os avisos"
         />
         <Stat
-          label="Confirmado pelo Mercado Pago"
-          value={formatCurrency(raisedFromWebhook)}
-          hint={`${approvedPayments.length} pagamento(s) via webhook`}
+          label="Valor conferido"
+          value={formatCurrency(raisedChecked)}
+          hint={`${checkedGifts.length} de ${giftPayments.length} conferido(s)`}
         />
         <Stat
           label="Mensagens"
@@ -186,38 +181,6 @@ export function AdminDashboard({ guests, messages, payments, giftPayments }: Adm
         )}
       </section>
 
-      {/* Pagamentos vindos do webhook (só existem com a integração oficial ligada) */}
-      {payments.length > 0 ? (
-        <section>
-          <h2 className="mb-4 text-2xl">Pagamentos via Mercado Pago</h2>
-
-          <div className="overflow-x-auto rounded-lg border border-green-100">
-            <table className="w-full min-w-[620px] border-collapse text-sm">
-              <caption className="sr-only">Pagamentos registrados</caption>
-              <thead className="bg-beige-200/60 text-left text-xs uppercase tracking-widest text-ink-muted">
-                <tr>
-                  <th scope="col" className="px-4 py-3 font-medium">Presente</th>
-                  <th scope="col" className="px-4 py-3 font-medium">Quem</th>
-                  <th scope="col" className="px-4 py-3 font-medium">Valor</th>
-                  <th scope="col" className="px-4 py-3 font-medium">Status</th>
-                  <th scope="col" className="px-4 py-3 font-medium">Método</th>
-                </tr>
-              </thead>
-              <tbody>
-                {payments.map((payment) => (
-                  <tr key={payment.id} className="border-t border-green-100">
-                    <td className="px-4 py-3">{payment.gift_id ?? "—"}</td>
-                    <td className="px-4 py-3">{payment.payer_name ?? "—"}</td>
-                    <td className="px-4 py-3 tabular">{formatCurrency(Number(payment.amount))}</td>
-                    <td className="px-4 py-3">{payment.status}</td>
-                    <td className="px-4 py-3">{payment.payment_method ?? "—"}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-      ) : null}
     </div>
   );
 }

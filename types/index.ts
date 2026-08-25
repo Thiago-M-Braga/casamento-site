@@ -13,7 +13,10 @@ export type Gift = {
   /** Valor em reais (número, não string) */
   value: number;
   image?: string;
-  /** Link de pagamento reutilizável (Mercado Pago, PicPay, etc.) */
+  /**
+   * Link do PagBank deste presente (reutilizável por vários convidados).
+   * O convidado escolhe cartão, PIX ou boleto dentro da página do PagBank.
+   */
   paymentUrl?: string;
   active: boolean;
   featured?: boolean;
@@ -128,31 +131,6 @@ export type GuestMessage = {
   guest_name: string;
   message: string;
   approved: boolean;
-};
-
-// ---------------------------------------------------------------------------
-// Pagamentos
-// ---------------------------------------------------------------------------
-
-export type PaymentStatus =
-  | "pending"
-  | "in_process"
-  | "approved"
-  | "rejected"
-  | "refunded"
-  | "cancelled"
-  | "unknown";
-
-export type PaymentRecord = {
-  id: string;
-  gift_id: string | null;
-  external_payment_id: string | null;
-  payer_name: string | null;
-  amount: number;
-  status: PaymentStatus;
-  payment_method: string | null;
-  created_at: string;
-  updated_at: string;
 };
 
 // ---------------------------------------------------------------------------

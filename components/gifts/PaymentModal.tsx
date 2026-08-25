@@ -6,7 +6,8 @@ import { Button, ButtonLink } from "@/components/ui/Button";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { FormFeedback } from "@/components/ui/FormFeedback";
 import { weddingConfig } from "@/config/wedding";
-import { buildPixPayload, isPixConfigured } from "@/lib/utils/pix";
+import { getGiftPaymentUrl, isPixAvailable } from "@/lib/payments/links";
+import { buildPixPayload } from "@/lib/utils/pix";
 import { formatCurrency, whatsappLink } from "@/lib/utils/format";
 import { PixQrCode } from "./PixQrCode";
 import { PaymentReportForm } from "./PaymentReportForm";
@@ -20,40 +21,34 @@ type PaymentModalProps = {
   onClose: () => void;
   /** null = contribuição de valor livre (sem presente específico) */
   gift: Gift | null;
-  /** True quando o Checkout Pro está ativo no servidor */
-  mercadoPagoEnabled: boolean;
 };
 
 /**
- * Modal de pagamento.
+ * Modal de pagamento — PagBank.
  *
- * O caminho principal é o **link de pagamento**: é lá, no ambiente do Mercado
- * Pago, que o convidado escolhe entre cartão, boleto e PIX. O PIX direto fica
- * como alternativa secundária, para quem prefere copiar a chave.
+ * Ao clicar em "Pagar", o convidado vai direto para o link do PagBank daquele
+ * presente (`paymentUrl` em `config/gifts.ts`), e escolhe lá dentro se paga com
+ * cartão, PIX ou boleto. O site não processa pagamento nenhum.
  *
- * Depois de pagar, o convidado pode avisar em "Já fiz o pagamento", com
- * comprovante opcional e opção de ficar anônimo.
+ * O PIX direto do casal continua disponível como atalho opcional, e depois de
+ * pagar o convidado pode avisar em "Já fiz o pagamento".
  */
-export function PaymentModal({ open, onClose, gift, mercadoPagoEnabled }: PaymentModalProps) {
-  const { pixKey, pixName, pixInstructions, cardInstructions, mercadoPagoLink } =
+export function PaymentModal({ open, onClose, gift }: PaymentModalProps) {
+  const { pixKey, pixName, pixInstructions, pagbankInstructions, pagbankName } =
     weddingConfig.payments;
 
-  const externalLink = gift?.paymentUrl?.trim() || mercadoPagoLink?.trim() || "";
-  const linkAvailable = mercadoPagoEnabled || Boolean(externalLink);
-  const pixAvailable = isPixConfigured();
+  const paymentUrl = getGiftPaymentUrl(gift);
+  const linkAvailable = Boolean(paymentUrl);
+  const pixAvailable = isPixAvailable();
 
   const [step, setStep] = useState<Step>("escolha");
   const [method, setMethod] = useState<GiftPaymentMethod>("link");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [warning, setWarning] = useState<string | undefined>();
 
   useEffect(() => {
     if (!open) return;
     setStep("escolha");
     setMethod(linkAvailable ? "link" : "pix");
-    setError(null);
-    setLoading(false);
     setWarning(undefined);
   }, [open, linkAvailable]);
 
@@ -70,46 +65,6 @@ export function PaymentModal({ open, onClose, gift, mercadoPagoEnabled }: Paymen
     ? `Oi! Acabei de enviar o presente "${gift.title}" (${formatCurrency(gift.value)}). 🎁`
     : "Oi! Acabei de enviar uma contribuição de presente. 🎁";
 
-  /** Checkout Pro: cria a preferência no servidor e redireciona. */
-  async function startCheckout() {
-    if (!gift) {
-      if (externalLink) window.open(externalLink, "_blank", "noopener,noreferrer");
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-
-    try {
-      const response = await fetch("/api/payments", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ giftId: gift.id }),
-      });
-
-      const result = (await response.json()) as
-        | { ok: true; data: { kind: "redirect"; url: string } | { kind: "pix"; payload: string } }
-        | { ok: false; error: string };
-
-      if (!result.ok) {
-        setError(result.error);
-        return;
-      }
-
-      if (result.data.kind === "redirect") {
-        window.location.href = result.data.url;
-        return;
-      }
-
-      setMethod("pix");
-      setStep("pix");
-    } catch {
-      setError("Não foi possível abrir o pagamento. Tente o PIX ou fale com a gente.");
-    } finally {
-      setLoading(false);
-    }
-  }
-
   return (
     <Modal open={open} onClose={onClose} title={title}>
       {gift ? (
@@ -121,47 +76,47 @@ export function PaymentModal({ open, onClose, gift, mercadoPagoEnabled }: Paymen
       )}
 
       {/* =================================================================== */}
-      {/* 1. Escolha                                                          */}
+      {/* 1. Pagar                                                            */}
       {/* =================================================================== */}
       {step === "escolha" ? (
         <div className="mt-5 animate-fade-in">
           {linkAvailable ? (
             <>
-              <p className="text-sm leading-relaxed text-ink-soft">{cardInstructions}</p>
+              <p className="text-sm leading-relaxed text-ink-soft">{pagbankInstructions}</p>
+
+              <ul className="mt-4 space-y-2 text-sm text-ink-soft">
+                {["Cartão de crédito, com parcelamento", "PIX", "Boleto bancário"].map((item) => (
+                  <li key={item} className="flex items-start gap-3">
+                    <span
+                      aria-hidden="true"
+                      className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-bordo-400"
+                    />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
 
               <div className="mt-5">
-                {mercadoPagoEnabled ? (
-                  <Button variant="primary" fullWidth onClick={startCheckout} disabled={loading}>
-                    {loading ? "Abrindo..." : "Ir para o pagamento"}
-                  </Button>
-                ) : (
-                  <ButtonLink
-                    href={externalLink}
-                    external
-                    variant="primary"
-                    fullWidth
-                    onClick={() => setMethod("link")}
-                    aria-label="Ir para o pagamento (abre o Mercado Pago em nova aba)"
-                  >
-                    Ir para o pagamento
-                  </ButtonLink>
-                )}
+                <ButtonLink
+                  href={paymentUrl}
+                  external
+                  variant="primary"
+                  fullWidth
+                  onClick={() => setMethod("link")}
+                  aria-label={`Pagar com ${pagbankName} (abre em nova aba)`}
+                >
+                  Pagar com {pagbankName}
+                </ButtonLink>
               </div>
-
-              {error ? (
-                <p role="alert" className="mt-3 text-xs text-red-700">
-                  {error}
-                </p>
-              ) : null}
             </>
           ) : (
             <FormFeedback tone="info">
-              O link de pagamento ainda não foi configurado.
+              O link de pagamento deste presente ainda não foi configurado.
               {pixAvailable ? " Use o PIX abaixo." : " Fale com o casal pelo WhatsApp. 🙂"}
             </FormFeedback>
           )}
 
-          {/* PIX como alternativa, não como padrão */}
+          {/* PIX direto do casal, como atalho opcional */}
           {pixAvailable ? (
             <button
               type="button"
@@ -171,7 +126,7 @@ export function PaymentModal({ open, onClose, gift, mercadoPagoEnabled }: Paymen
               }}
               className="link-underline mt-4 text-sm text-green-800"
             >
-              Prefiro pagar por PIX
+              Prefiro fazer um PIX direto
             </button>
           ) : null}
 
@@ -188,7 +143,7 @@ export function PaymentModal({ open, onClose, gift, mercadoPagoEnabled }: Paymen
       ) : null}
 
       {/* =================================================================== */}
-      {/* 2. PIX                                                              */}
+      {/* 2. PIX direto                                                       */}
       {/* =================================================================== */}
       {step === "pix" ? (
         <div className="mt-5 animate-fade-in">

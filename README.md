@@ -6,7 +6,7 @@ de pagamento, confirmação de presença (RSVP), mural de mensagens e galeria de
 fotos.
 
 **Stack:** Next.js (App Router) · TypeScript · React · Tailwind CSS · Supabase
-(PostgreSQL) · Mercado Pago · Vercel.
+(PostgreSQL) · PagBank · Vercel.
 
 ---
 
@@ -20,7 +20,7 @@ fotos.
 6. [Lista de presentes](#6-lista-de-presentes)
 7. [Formas de pagamento](#7-formas-de-pagamento)
 8. [Supabase (banco de dados)](#8-supabase-banco-de-dados)
-9. [Mercado Pago](#9-mercado-pago)
+9. [PagBank](#9-pagbank)
 10. [Painel administrativo](#10-painel-administrativo)
 11. [Deploy na Vercel](#11-deploy-na-vercel)
 12. [Domínio próprio](#12-domínio-próprio)
@@ -103,7 +103,7 @@ de componente. Tudo mora em `config/`.
 | Nomes, data, horário, locais, contato, redes     | `config/wedding.ts`     |
 | Textos da história e da linha do tempo           | `config/wedding.ts`     |
 | Fotos da galeria e informações úteis             | `config/wedding.ts`     |
-| Chave PIX, link do Mercado Pago, formas de pagamento | `config/wedding.ts` → `payments` |
+| Chave PIX, links do PagBank, formas de pagamento | `config/wedding.ts` → `payments` |
 | Velocidade da rolagem suave                      | `config/theme.ts` → `scroll.duration` |
 | Endereço do painel (`/adm/2329`)                 | `config/wedding.ts` → `admin.secretPath` |
 | Ligar/desligar seções (presentes, RSVP, galeria) | `config/wedding.ts` → `features` |
@@ -215,8 +215,8 @@ Edite `config/gifts.ts`:
 }
 ```
 
-O botão **Presentear** abre um modal onde o convidado escolhe a forma de
-pagamento. Veja a seção seguinte.
+**O campo mais importante é o `paymentUrl`**: é o link do PagBank daquele
+presente. Sem ele, o botão de pagar não tem para onde mandar o convidado.
 
 A página `/presentes` mostra a lista inteira, com filtros por faixa de valor
 (Todos · Até R$ 100 · R$ 100–500 · R$ 500+) e contagem de resultados. A home
@@ -227,31 +227,52 @@ completa.
 
 ## 7. Formas de pagamento
 
-O convidado escolhe entre **cartão de crédito, boleto ou PIX** dentro do mesmo
-modal (`components/gifts/PaymentModal.tsx`):
+O pagamento é feito por **link do PagBank**, um por presente. O site não
+processa pagamento, não guarda credencial e não precisa de webhook: quem cuida
+de tudo é o PagBank.
 
-| Passo                    | O que acontece                                                       |
-| ------------------------ | -------------------------------------------------------------------- |
-| **Ir para o pagamento**  | Caminho principal. Manda para o Mercado Pago, e é **lá** que o convidado escolhe entre cartão (com parcelamento), boleto e PIX |
-| **Prefiro pagar por PIX** | Alternativa. Mostra chave, QR Code e copia e cola, gerados aqui no site |
-| **Já fiz o pagamento**   | Registra o presente no painel do casal (veja abaixo)                 |
+Ao clicar em **Presentear**, abre um modal (`components/gifts/PaymentModal.tsx`)
+com três caminhos:
 
-### Cartão e boleto
+| Passo                       | O que acontece                                                     |
+| --------------------------- | ------------------------------------------------------------------ |
+| **Pagar com PagBank**       | Caminho principal. Abre o link daquele presente, e é **lá** que o convidado escolhe entre cartão (com parcelamento), PIX e boleto |
+| **Prefiro fazer um PIX direto** | Atalho opcional. Mostra chave, QR Code e copia e cola, gerados aqui no site |
+| **Já fiz o pagamento**      | Registra o presente no painel do casal (veja abaixo)               |
+
+### Links do PagBank
+
+Um link por presente, em `config/gifts.ts`:
 
 ```ts
-// config/wedding.ts
+{
+  id: "chocolate-da-noiva",
+  value: 100,
+  paymentUrl: "https://pag.ae/...",   // ← link do PagBank deste presente
+}
+```
+
+Como gerar: **PagBank → Vender → Link de pagamento**, com o valor do presente.
+O mesmo link serve para todos os convidados — **não** crie um link por pessoa.
+
+Em `config/wedding.ts` ficam o link da contribuição de valor livre e o texto
+mostrado antes de redirecionar:
+
+```ts
 payments: {
-  // Link de pagamento do Mercado Pago, reutilizável por todos os convidados
-  mercadoPagoLink: "https://mpago.la/...",
+  pagbankLink: "https://pag.ae/...",   // contribuição livre e reserva
+  pagbankInstructions: "Você vai para o ambiente seguro do PagBank...",
+  pixEnabled: true,                     // false esconde o PIX direto
 },
 ```
 
-A ordem de resolução do link é: `paymentUrl` do presente → `mercadoPagoLink`
-geral → checkout criado pela API (se `mercadoPagoEnabled` estiver ligado). Se
-nada estiver configurado, a aba explica isso e o PIX continua funcionando.
+A ordem de resolução é: `paymentUrl` do presente → `pagbankLink` geral → PIX. Se
+nada estiver configurado, o modal avisa e oferece o WhatsApp do casal.
 
-Para gerar o link: Mercado Pago → **Sua empresa → Link de pagamento**. O mesmo
-link serve para todos os convidados — **não** crie um link por pessoa.
+> Opcional: no PagBank você pode definir para onde o convidado volta após pagar.
+> Aponte para `/agradecimento` (aceita `?presente=<id>` para citar o presente
+> pelo nome). As telas `/pagamento/pendente` e `/pagamento/erro` existem para o
+> mesmo fim.
 
 ### PIX
 
@@ -286,8 +307,8 @@ extrato. O comprovante fica num bucket **privado** do Supabase Storage e é
 aberto por URL assinada e temporária.
 
 > Esses avisos são declarados pelo convidado, então trate-os como aviso, não
-> como confirmação bancária. A confirmação automática só existe com a
-> integração oficial do Mercado Pago ligada (seção 9).
+> como confirmação bancária. Confira no extrato do PagBank antes de marcar
+> "conferido" no painel.
 
 ---
 
@@ -336,7 +357,7 @@ Necessário para **persistir** o RSVP e as mensagens.
 | `guest_messages` | Mural de recados (`approved = false` por padrão)      |
 | `gift_payments`  | Presentes comprados, avisados pelos próprios convidados |
 | `gifts`          | Opcional — a lista vive em `config/gifts.ts`          |
-| `payments`       | Pagamentos, se o Mercado Pago for ativado             |
+| `payments`       | Legado, sem uso — era do webhook do Mercado Pago      |
 
 ### Row Level Security
 
@@ -352,36 +373,49 @@ e rate limiting.
 
 ---
 
-## 9. Mercado Pago
+## 9. PagBank
 
-**Opcional.** A primeira versão funciona muito bem com links de pagamento + PIX.
+O site usa **links de pagamento**, um por presente. Não há credencial, API,
+webhook nem chave secreta envolvida — e por isso não há nada a configurar no
+`.env`.
 
-Para ativar o Checkout Pro:
+### Passo a passo
 
-1. `config/wedding.ts` → `payments.mercadoPagoEnabled = true`
-2. `.env.local`:
+1. No PagBank: **Vender → Link de pagamento**. Crie um link para cada presente,
+   com o valor correspondente.
+2. Cole cada link em `config/gifts.ts` → `paymentUrl`.
+3. Crie também um link de valor livre e cole em `config/wedding.ts` →
+   `payments.pagbankLink` (usado na contribuição livre).
+4. Opcional: no PagBank, configure o redirecionamento pós-pagamento para
+   `https://seu-dominio.com.br/agradecimento`.
 
-   ```env
-   MERCADOPAGO_ACCESS_TOKEN=APP_USR-...
-   NEXT_PUBLIC_MERCADOPAGO_PUBLIC_KEY=APP_USR-...
-   ```
+### Fluxo
 
-3. No painel do Mercado Pago, cadastre o webhook:
+```
+Convidado clica em "Presentear"
+        ↓
+Modal mostra o valor e as formas disponíveis
+        ↓
+"Pagar com PagBank" → abre o link daquele presente
+        ↓
+Ele escolhe cartão, PIX ou boleto no PagBank
+        ↓
+Volta ao site e clica em "Já fiz o pagamento"
+        ↓
+Aviso (com comprovante opcional) cai no painel /adm/2329
+```
 
-   ```
-   https://seu-dominio.com.br/api/webhooks/mercadopago
-   ```
+### Segurança
 
-Fluxo: o convidado clica em **Presentear** → `POST /api/payments` cria a
-preferência → é redirecionado ao ambiente seguro do Mercado Pago → volta para
-`/agradecimento`, `/pagamento/pendente` ou `/pagamento/erro` → o webhook grava o
-pagamento em `payments`.
+O site nunca vê número de cartão, CVV ou validade — tudo acontece no domínio do
+PagBank. Também não guardamos nenhum token, porque não existe integração via API.
 
-O access token **nunca** sai do servidor. O site não coleta número de cartão,
-CVV nem validade em nenhum momento.
+### Se quiser automatizar depois
 
-Se um dia quiser trocar de provedor, implemente a interface `PaymentProvider`
-(`lib/mercadopago/provider.ts`) — nada no frontend precisa mudar.
+Hoje a confirmação é manual: o convidado avisa, o casal confere no extrato. Para
+receber confirmação automática seria preciso a API do PagBank com webhook. O
+ponto de troca é `lib/payments/links.ts`, que hoje só resolve qual URL abrir —
+os componentes chamam essa função e não precisariam mudar.
 
 ---
 
@@ -406,8 +440,8 @@ Sem `ADMIN_PASSWORD` o painel fica **desabilitado** e não mostra dado nenhum.
 ### O que o painel mostra
 
 - **Números**: respostas, confirmados, recusados, pessoas esperadas (adultos e
-  crianças), presentes comprados, valor declarado, valor confirmado pelo
-  Mercado Pago e mensagens pendentes.
+  crianças), presentes comprados, valor declarado, valor conferido e
+  mensagens pendentes.
 - **Presentes comprados**: cada aviso enviado pelos convidados, com nome (ou
   "Anônimo"), valor, forma de pagamento, recado, link para o comprovante e um
   checkbox **Conferido** para marcar o que já bateu com o extrato.
@@ -449,8 +483,6 @@ GitHub  →  Vercel  →  Next.js
    NEXT_PUBLIC_SUPABASE_ANON_KEY
    SUPABASE_SERVICE_ROLE_KEY
    ADMIN_PASSWORD
-   MERCADOPAGO_ACCESS_TOKEN                (se usar)
-   NEXT_PUBLIC_MERCADOPAGO_PUBLIC_KEY      (se usar)
    ```
 
 4. Deploy. Cada `git push` na `main` publica automaticamente.
@@ -502,7 +534,7 @@ components/
 └── admin/              Login e dashboard
 
 config/                 wedding.ts · gifts.ts · theme.ts · navigation.ts
-lib/                    supabase/ · mercadopago/ · utils/ · validations/ · admin/
+lib/                    supabase/ · payments/ · utils/ · validations/ · admin/
 types/                  Tipos compartilhados
 supabase/migrations/    SQL (tabelas + RLS)
 public/images/          Fotos, organizadas por seção
@@ -514,7 +546,7 @@ public/images/          Fotos, organizadas por seção
 
 - Nenhuma credencial no frontend. Só variáveis `NEXT_PUBLIC_*` chegam ao
   navegador, e elas são públicas por definição.
-- `SUPABASE_SERVICE_ROLE_KEY`, `MERCADOPAGO_ACCESS_TOKEN` e `ADMIN_PASSWORD`
+- `SUPABASE_SERVICE_ROLE_KEY` e `ADMIN_PASSWORD`
   são lidos apenas em Route Handlers e Server Components.
 - RLS ligado em todas as tabelas; o banco não fica aberto.
 - Formulários protegidos por validação dupla (cliente + servidor, com Zod),
@@ -532,7 +564,7 @@ public/images/          Fotos, organizadas por seção
 
 - [ ] `config/wedding.ts` com nomes, data, horário e endereços reais
 - [ ] Chave PIX conferida (faça um teste de R$ 1 com você mesmo)
-- [ ] `payments.mercadoPagoLink` preenchido, para liberar cartão e boleto
+- [ ] Link do PagBank preenchido em TODOS os presentes (`paymentUrl`)
 - [ ] Links de pagamento dos presentes testados
 - [ ] Imagens substituídas em `public/images/`
 - [ ] Supabase configurado e um RSVP de teste aparecendo na tabela `guests`

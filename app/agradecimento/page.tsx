@@ -12,8 +12,12 @@ export const metadata: Metadata = {
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
 /**
- * Tela de agradecimento — também é a URL de retorno de sucesso do pagamento.
- * O Mercado Pago devolve `payment_id`, `status` e `external_reference`.
+ * Tela de agradecimento.
+ *
+ * Pode ser usada como URL de retorno do link do PagBank (campo "redirecionar
+ * após o pagamento"). Aceita `presente=<id-do-presente>` para citar o presente
+ * pelo nome, e `payment_id` para exibir um número de comprovante — ambos
+ * opcionais, a página funciona sem nenhum parâmetro.
  */
 export default async function AgradecimentoPage({
   searchParams,
@@ -25,7 +29,7 @@ export default async function AgradecimentoPage({
   const first = (value: string | string[] | undefined) =>
     Array.isArray(value) ? value[0] : value;
 
-  const giftId = first(params.external_reference);
+  const giftId = first(params.presente) ?? first(params.external_reference);
   const paymentId = first(params.payment_id);
   const gift = giftId ? getGiftById(giftId) : undefined;
 

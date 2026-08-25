@@ -112,18 +112,14 @@ export default function HomePage() {
             className="mb-12 md:mb-16"
           />
 
-          <GiftGrid
-            gifts={featuredGifts}
-            mercadoPagoEnabled={payments.mercadoPagoEnabled}
-            showFilters={false}
-          />
+          <GiftGrid gifts={featuredGifts} showFilters={false} />
 
           <div className="mt-12 flex flex-col items-center gap-3">
             <ButtonLink href="/presentes" variant="primary" size="lg">
               Ver a lista completa
             </ButtonLink>
             <p className="text-xs uppercase tracking-widest text-ink-muted">
-              {totalGifts} presentes · cartão, boleto ou PIX
+              {totalGifts} presentes · cartão, PIX ou boleto
             </p>
           </div>
         </Section>

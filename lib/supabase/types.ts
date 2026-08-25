@@ -34,6 +34,12 @@ export type GuestMessageInsert = Omit<GuestMessageRow, "id" | "created_at" | "ap
   approved?: boolean;
 };
 
+/**
+ * LEGADO — a tabela `payments` foi criada na migration 0001 para receber o
+ * webhook do Mercado Pago. O site usa links do PagBank, então nada escreve
+ * nela hoje. Mantida no banco e aqui apenas para não quebrar histórico; os
+ * presentes recebidos vivem em `gift_payments`.
+ */
 export type PaymentRow = {
   id: string;
   created_at: string;

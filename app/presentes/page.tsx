@@ -8,9 +8,12 @@ import { EasterEgg } from "@/components/ui/EasterEgg";
 import { ButtonLink } from "@/components/ui/Button";
 import { GiftGrid } from "@/components/gifts/GiftGrid";
 import { ContributionSection } from "@/components/gifts/ContributionSection";
+import { FormFeedback } from "@/components/ui/FormFeedback";
 import { getActiveGifts, giftsContent } from "@/config/gifts";
 import { weddingConfig } from "@/config/wedding";
+import { countGiftsWithoutLink } from "@/lib/payments/links";
 import { formatCurrency, whatsappLink } from "@/lib/utils/format";
+import type { Gift } from "@/types";
 
 export const metadata: Metadata = {
   title: "Lista de presentes",
@@ -18,24 +21,52 @@ export const metadata: Metadata = {
   alternates: { canonical: "/presentes" },
 };
 
-/** Formas de pagamento anunciadas na página (todas passam pelo mesmo modal). */
+/**
+ * Formas de pagamento anunciadas na página.
+ * Todas ficam disponíveis dentro do link do PagBank de cada presente.
+ */
 const paymentMethods = [
   {
     icon: "💳",
     title: "Cartão de crédito",
-    description: "No ambiente seguro do Mercado Pago, com opção de parcelamento.",
+    description: "Com opção de parcelamento, no ambiente seguro do PagBank.",
+  },
+  {
+    icon: "⚡",
+    title: "PIX",
+    description: "Aprovação na hora, direto pelo app do seu banco.",
   },
   {
     icon: "🧾",
     title: "Boleto bancário",
     description: "Gerado na hora, para pagar no banco ou no app.",
   },
-  {
-    icon: "⚡",
-    title: "PIX",
-    description: "Chave, QR Code e código copia e cola direto aqui no site.",
-  },
 ];
+
+/**
+ * Aviso visível SÓ em desenvolvimento, para o casal não publicar a lista com
+ * presentes sem link do PagBank. Nunca aparece para os convidados.
+ */
+function MissingLinksNotice({ gifts }: { gifts: Gift[] }) {
+  if (process.env.NODE_ENV === "production") return null;
+
+  const missing = countGiftsWithoutLink(gifts);
+  if (missing === 0) return null;
+
+  return (
+    <div className="container-page pt-24">
+      <FormFeedback tone="info">
+        <strong className="font-medium">Aviso de desenvolvimento:</strong> {missing} de{" "}
+        {gifts.length} presentes ainda estão sem link do PagBank. Cole o link de cada um em{" "}
+        <code className="font-mono">config/gifts.ts</code> →{" "}
+        <code className="font-mono">paymentUrl</code>.
+        {weddingConfig.payments.pagbankLink
+          ? " Enquanto isso, eles usam o link geral."
+          : " Enquanto isso, o modal oferece o PIX."}
+      </FormFeedback>
+    </div>
+  );
+}
 
 export default function PresentesPage() {
   if (!weddingConfig.features.gifts) notFound();
@@ -48,6 +79,8 @@ export default function PresentesPage() {
 
   return (
     <>
+      <MissingLinksNotice gifts={gifts} />
+
       {/* ------------------------------------------------------------------ */}
       {/* Abertura                                                           */}
       {/* ------------------------------------------------------------------ */}
@@ -98,12 +131,7 @@ export default function PresentesPage() {
           className="mb-12"
         />
 
-        <GiftGrid
-          gifts={gifts}
-          mercadoPagoEnabled={weddingConfig.payments.mercadoPagoEnabled}
-          showFilters
-          showCount
-        />
+        <GiftGrid gifts={gifts} showFilters showCount />
       </Section>
 
       {/* ------------------------------------------------------------------ */}

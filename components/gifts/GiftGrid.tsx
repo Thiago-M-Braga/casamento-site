@@ -10,7 +10,6 @@ import type { Gift, GiftPriceRange } from "@/types";
 
 type GiftGridProps = {
   gifts: Gift[];
-  mercadoPagoEnabled: boolean;
   /** Exibe os botões de filtro por faixa de valor */
   showFilters?: boolean;
   /** Mostra "12 presentes na lista" acima da grade */
@@ -24,7 +23,6 @@ type GiftGridProps = {
  */
 export function GiftGrid({
   gifts,
-  mercadoPagoEnabled,
   showFilters = true,
   showCount = false,
   className,
@@ -99,7 +97,6 @@ export function GiftGrid({
         open={selectedGift !== null}
         onClose={() => setSelectedGift(null)}
         gift={selectedGift}
-        mercadoPagoEnabled={mercadoPagoEnabled}
       />
     </div>
   );

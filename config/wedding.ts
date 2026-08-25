@@ -82,27 +82,31 @@ export const weddingConfig = {
     pixInstructions:
       "Abra o app do seu banco, escolha PIX → Pagar com chave, cole a chave abaixo e informe o valor do presente. Depois, se quiser, nos manda um print no WhatsApp. 😄",
 
-    // --- Cartão e boleto (Mercado Pago) -------------------------------------
+    /** Deixe false para esconder a opção de PIX direto e usar só o PagBank. */
+    pixEnabled: true,
+
+    // --- PagBank -------------------------------------------------------------
     /**
-     * Link de pagamento do Mercado Pago, usado quando o presente não tem um
-     * `paymentUrl` próprio em `config/gifts.ts`.
+     * Cada presente tem o SEU link do PagBank, em `config/gifts.ts` →
+     * `paymentUrl`. É lá que você cola os links.
      *
-     * Como criar: Mercado Pago → Sua empresa → Link de pagamento → gere um link
-     * e cole aqui. O mesmo link pode ser usado por todos os convidados, e o
-     * Mercado Pago já oferece cartão de crédito, boleto e PIX na própria página.
+     * Como criar: PagBank → Vender → Link de pagamento → crie um link com o
+     * valor do presente. O convidado escolhe a forma de pagamento (cartão com
+     * parcelamento, PIX ou boleto) dentro da página do PagBank.
+     *
+     * O mesmo link serve para vários convidados — não crie um link por pessoa.
      */
-    mercadoPagoLink: "",
+    pagbankName: "PagBank",
+
+    /**
+     * Link usado na "contribuição livre" (valor à escolha do convidado) e como
+     * reserva para presentes que ainda não têm link próprio.
+     */
+    pagbankLink: "",
 
     /** Texto exibido antes de mandar o convidado para o link de pagamento */
-    cardInstructions:
-      "Você vai para o ambiente seguro do Mercado Pago e escolhe lá a forma de pagamento: cartão de crédito (com parcelamento), boleto ou PIX. Não passamos perto dos seus dados de pagamento.",
-
-    /**
-     * Integração oficial via API (Checkout Pro), criando um checkout por
-     * presente. Requer MERCADOPAGO_ACCESS_TOKEN. Deixe false para usar apenas
-     * os links de pagamento acima.
-     */
-    mercadoPagoEnabled: false,
+    pagbankInstructions:
+      "Você vai para o ambiente seguro do PagBank e escolhe lá a forma de pagamento: cartão de crédito (com parcelamento), PIX ou boleto. Não passamos perto dos seus dados de pagamento.",
   },
 
   // -------------------------------------------------------------------------

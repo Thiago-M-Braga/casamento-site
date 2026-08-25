@@ -8,12 +8,7 @@ import { AdminDashboard, type AdminData } from "@/components/admin/AdminDashboar
 import { AdminLogout } from "@/components/admin/AdminLogout";
 import { isAdminAuthenticated, isAdminEnabled, isAdminPath } from "@/lib/admin/auth";
 import { getSupabaseAdminClient } from "@/lib/supabase/server";
-import type {
-  GiftPaymentRow,
-  GuestMessageRow,
-  GuestRow,
-  PaymentRow,
-} from "@/lib/supabase/types";
+import type { GiftPaymentRow, GuestMessageRow, GuestRow } from "@/lib/supabase/types";
 
 export const metadata: Metadata = {
   title: "Painel",
@@ -28,14 +23,13 @@ async function loadData(): Promise<AdminData | null> {
   const supabase = getSupabaseAdminClient();
   if (!supabase) return null;
 
-  const [guests, messages, payments, giftPayments] = await Promise.all([
+  const [guests, messages, giftPayments] = await Promise.all([
     supabase.from("guests").select("*").order("created_at", { ascending: false }).limit(500),
     supabase
       .from("guest_messages")
       .select("*")
       .order("created_at", { ascending: false })
       .limit(300),
-    supabase.from("payments").select("*").order("created_at", { ascending: false }).limit(300),
     supabase
       .from("gift_payments")
       .select("*")
@@ -46,7 +40,6 @@ async function loadData(): Promise<AdminData | null> {
   return {
     guests: (guests.data ?? []) as GuestRow[],
     messages: (messages.data ?? []) as GuestMessageRow[],
-    payments: (payments.data ?? []) as PaymentRow[],
     giftPayments: (giftPayments.data ?? []) as GiftPaymentRow[],
   };
 }

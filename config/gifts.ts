@@ -5,9 +5,16 @@ import type { Gift, GiftPriceRange } from "@/types";
  * ---------------------------------------------------------------------------
  * Para adicionar, remover ou mudar valores, edite apenas este arquivo.
  *
- * `paymentUrl`  → link de pagamento reutilizável (Mercado Pago, PicPay...).
+ * `paymentUrl`  → LINK DO PAGBANK deste presente. É o campo mais importante:
+ *                 é para cá que o botão "Pagar" manda o convidado, e é lá que
+ *                 ele escolhe entre cartão, PIX e boleto.
+ *
+ *                 Como gerar: PagBank → Vender → Link de pagamento → crie um
+ *                 link com o valor do presente e cole aqui.
+ *
  *                 O MESMO link pode ser usado por vários convidados.
- *                 Se ficar vazio, o botão cai automaticamente no PIX.
+ *                 Se ficar vazio, o modal usa `payments.pagbankLink` como
+ *                 reserva e, se também estiver vazio, oferece o PIX.
  * `active`      → false esconde o presente do site.
  * `featured`    → destaca o card na home.
  * `mystery`     → esconde a descrição até o convidado clicar (easter egg).
@@ -35,6 +42,7 @@ export const gifts: Gift[] = [
       "Uma contribuição para manter a noiva alimentada e, consequentemente, o casamento funcionando.",
     value: 100,
     image: "/images/presentes/imagem-presente-chocolate.webp",
+    // ↓ Cole aqui o link do PagBank deste presente. Ex.: "https://pag.ae/7abc123"
     paymentUrl: "",
     active: true,
     featured: true,

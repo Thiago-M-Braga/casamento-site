@@ -6,8 +6,10 @@ import { cn } from "@/lib/utils/cn";
 import type { GiftPaymentRow } from "@/lib/supabase/types";
 
 const methodLabels: Record<string, string> = {
-  link: "Link de pagamento",
-  pix: "PIX",
+  // 'link' é o valor gravado no banco desde o começo; o rótulo acompanha o
+  // provedor atual (PagBank) sem exigir migração de dados.
+  link: "PagBank",
+  pix: "PIX direto",
   outro: "Outro",
 };
 
@@ -194,7 +196,7 @@ export function GiftPaymentsTable({ rows }: { rows: GiftPaymentRow[] }) {
 
       <p className="text-xs leading-relaxed text-ink-muted">
         Os avisos são declarados pelos próprios convidados. Marque “conferido” depois de encontrar o
-        valor no extrato ou no painel do Mercado Pago.
+        valor no extrato ou no painel do PagBank.
       </p>
     </div>
   );

@@ -6,19 +6,20 @@ import { SectionTitle } from "@/components/ui/SectionTitle";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { weddingConfig } from "@/config/wedding";
+import { isPixAvailable } from "@/lib/payments/links";
 import { PaymentModal } from "./PaymentModal";
 
 /**
  * Bloco "prefiro escolher o valor": contribuição livre, sem card de presente.
- * Abre o mesmo modal de pagamento (cartão, boleto ou PIX).
+ * Usa o link geral do PagBank (`payments.pagbankLink`) ou o PIX direto.
  *
  * Não aparece se nenhuma forma de pagamento estiver configurada.
  */
 export function ContributionSection() {
   const [open, setOpen] = useState(false);
-  const { pixKey, mercadoPagoLink, mercadoPagoEnabled } = weddingConfig.payments;
+  const { pagbankLink } = weddingConfig.payments;
 
-  if (!pixKey && !mercadoPagoLink && !mercadoPagoEnabled) return null;
+  if (!pagbankLink?.trim() && !isPixAvailable()) return null;
 
   return (
     <Section tone="green">
@@ -29,7 +30,7 @@ export function ContributionSection() {
           subtitle={
             <span className="text-beige-200/85">
               Sem card, sem categoria, sem valor sugerido. Você decide quanto e como pagar — cartão,
-              boleto ou PIX. A gente promete usar com (alguma) responsabilidade.
+              PIX ou boleto. A gente promete usar com (alguma) responsabilidade.
             </span>
           }
         />
@@ -39,12 +40,7 @@ export function ContributionSection() {
         </Button>
       </Reveal>
 
-      <PaymentModal
-        open={open}
-        onClose={() => setOpen(false)}
-        gift={null}
-        mercadoPagoEnabled={mercadoPagoEnabled}
-      />
+      <PaymentModal open={open} onClose={() => setOpen(false)} gift={null} />
     </Section>
   );
 }
