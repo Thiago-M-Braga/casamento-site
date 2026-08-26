@@ -80,13 +80,13 @@ export const weddingConfig = {
      * ⚠️ AINDA É UM EXEMPLO — troque pela chave real antes de divulgar o site,
      * senão o QR Code aponta para uma chave que não existe.
      */
-    pixKey: "larissaethiago@exemplo.com.br",
-    pixName: "Larissa e Thiago",
+    pixKey: "larissaethiago21@gmail.com",
+    pixName: "Thiago",
     /** Cidade do recebedor — exigida pelo padrão PIX (BR Code), sem acento */
     pixCity: "JARAGUA DO SUL",
     /** Texto exibido na aba do PIX */
     pixInstructions:
-      "Abra o app do seu banco, escolha PIX → Pagar com chave, cole a chave acima e informe o valor. Se quiser, depois nos manda um print no WhatsApp. 😄",
+      "Abra o app do seu banco, escolha PIX → Pagar com chave, cole a chave acima e informe o valor. 😄",
 
     /** Deixe false para esconder a opção de PIX direto e usar só o PagBank. */
     pixEnabled: true,
@@ -121,7 +121,7 @@ export const weddingConfig = {
   site: {
     title: "Larissa & Thiago",
     description:
-      "Estamos nos casando! Aqui você encontra a nossa história, os detalhes do grande dia, a lista de presentes e o formulário de confirmação de presença.",
+      "Estamos nos casando! Aqui você encontra os detalhes do grande dia, a lista de presentes e o formulário de confirmação de presença.",
     /** Sem barra no final. Use o domínio próprio em produção. */
     url: "https://casamento-thiago-e-lari.vercel.app",
     locale: "pt-BR",
@@ -256,9 +256,9 @@ export const usefulInfo = {
     {
       icon: "🚗",
       title: "Estacionamento",
-      description: "Estacionamento gratuito no próprio local, com manobrista a partir das 8h.",
+      description: "Estacionamento gratuito no próprio local, sem manobrista.",
       details: [
-        "São cerca de 80 vagas, suficientes para todos os convidados.",
+        "São cerca de 50 vagas, suficientes para todos os convidados.",
         "A entrada é por uma via única, então reserve alguns minutos extras na chegada.",
       ],
     },

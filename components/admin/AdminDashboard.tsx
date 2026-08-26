@@ -103,7 +103,7 @@ export function AdminDashboard({ guests, messages, giftPayments }: AdminData) {
         {guests.length === 0 ? (
           <p className="text-sm text-ink-muted">Nenhuma confirmação ainda.</p>
         ) : (
-          <div className="overflow-x-auto rounded-lg border border-green-100">
+          <div className="scrollbar-thin overflow-x-auto rounded-lg border border-green-100">
             <table className="w-full min-w-[720px] border-collapse text-sm">
               <caption className="sr-only">Lista de confirmações de presença</caption>
               <thead className="bg-beige-200/60 text-left text-xs uppercase tracking-widest text-ink-muted">

@@ -84,18 +84,6 @@ export function PaymentModal({ open, onClose, gift }: PaymentModalProps) {
             <>
               <p className="text-sm leading-relaxed text-ink-soft">{pagbankInstructions}</p>
 
-              <ul className="mt-4 space-y-2 text-sm text-ink-soft">
-                {["Cartão de crédito, com parcelamento", "PIX", "Boleto bancário"].map((item) => (
-                  <li key={item} className="flex items-start gap-3">
-                    <span
-                      aria-hidden="true"
-                      className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-bordo-400"
-                    />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-
               <div className="mt-5">
                 <ButtonLink
                   href={paymentUrl}
@@ -147,9 +135,7 @@ export function PaymentModal({ open, onClose, gift }: PaymentModalProps) {
       {/* =================================================================== */}
       {step === "pix" ? (
         <div className="mt-5 animate-fade-in">
-          <PixQrCode payload={payload} size={150} />
-
-          <dl className="mt-5 space-y-3">
+          <dl className="space-y-3">
             <div>
               <dt className="text-xs uppercase tracking-widest text-ink-muted">Chave PIX</dt>
               <dd className="mt-1 break-all rounded-md border border-green-100 bg-beige-100 px-3 py-2 font-mono text-xs text-green-800">
@@ -164,15 +150,6 @@ export function PaymentModal({ open, onClose, gift }: PaymentModalProps) {
 
           <div className="mt-4 flex flex-col gap-2">
             <CopyButton value={pixKey} label="Copiar chave" copiedLabel="Chave copiada!" fullWidth />
-            {payload ? (
-              <CopyButton
-                value={payload}
-                label="Copiar código PIX"
-                copiedLabel="Código copiado!"
-                variant="outline"
-                fullWidth
-              />
-            ) : null}
           </div>
 
           <p className="mt-4 text-xs leading-relaxed text-ink-muted">{pixInstructions}</p>

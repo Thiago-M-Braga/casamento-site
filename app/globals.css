@@ -30,6 +30,48 @@
     /* Compensa a navbar fixa quando o salto acontece sem JS */
     scroll-padding-top: 5.5rem;
     -webkit-tap-highlight-color: transparent;
+
+    /* Reserva o espaço da barra de rolagem mesmo quando ela desaparece (ex.:
+       ao abrir um modal, que trava o scroll do body) — evita o conteúdo
+       "pulando" alguns pixels para o lado. */
+    scrollbar-gutter: stable;
+
+    /* Firefox: `scrollbar-color` e `scrollbar-width` são herdados por toda a
+       página, então já cobrem qualquer área com scroll próprio (modais,
+       tabelas do painel) sem precisar repetir a regra em cada uma. */
+    scrollbar-width: thin;
+    scrollbar-color: theme("colors.green.300") theme("colors.beige.200");
+  }
+
+  /* Chrome, Edge e Safari — barra de rolagem em pílula, no estilo dos botões
+     do site. `::-webkit-scrollbar` sem seletor à esquerda equivale a `*`,
+     então uma única regra cobre a página inteira e qualquer contêiner com
+     scroll próprio (modal, tabelas do painel). */
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: theme("colors.beige.200");
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: theme("colors.green.300");
+    border-radius: theme("borderRadius.full");
+    /* Borda transparente + `background-clip: content-box` recorta o preenchimento
+       para dentro, criando a pílula com um respiro em volta — sem depender da
+       cor do fundo por trás (funciona igual no body e no modal). */
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: theme("colors.green.500");
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: transparent;
   }
 
   body {
@@ -119,6 +161,20 @@
 
   .no-scrollbar::-webkit-scrollbar {
     display: none;
+  }
+
+  /* Barra mais fina, para áreas compactas como o corpo do modal. */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    border-width: 2px;
   }
 
   /* Números da contagem regressiva alinhados (evita "pulo" de largura) */

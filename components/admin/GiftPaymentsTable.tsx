@@ -106,7 +106,7 @@ export function GiftPaymentsTable({ rows }: { rows: GiftPaymentRow[] }) {
         </p>
       ) : null}
 
-      <div className="overflow-x-auto rounded-lg border border-green-100">
+      <div className="scrollbar-thin overflow-x-auto rounded-lg border border-green-100">
         <table className="w-full min-w-[820px] border-collapse text-sm">
           <caption className="sr-only">Presentes comprados pelos convidados</caption>
           <thead className="bg-beige-200/60 text-left text-xs uppercase tracking-widest text-ink-muted">

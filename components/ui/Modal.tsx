@@ -114,7 +114,7 @@ export function Modal({
           aria-labelledby={title ? "modal-title" : undefined}
           tabIndex={-1}
           className={cn(
-            "relative flex max-h-[85dvh] w-full flex-col overflow-y-auto",
+            "relative flex max-h-[85dvh] w-full flex-col overflow-y-auto scrollbar-thin",
             "animate-scale-in rounded-t-2xl bg-beige-50 p-5 shadow-lift",
             "sm:rounded-2xl sm:p-6",
             sizes[size],
