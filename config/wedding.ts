@@ -33,7 +33,7 @@ export const weddingConfig = {
     time: "09:00",
     timezone: "America/Sao_Paulo",
     /** Mensagem exibida quando a contagem regressiva chega a zero */
-    countdownFinishedMessage: "Hoje é o grande dia. Obrigado por celebrar com a gente. ❤️",
+    countdownFinishedMessage: "Hoje é o grande dia! Obrigado por celebrar com a gente. ❤️",
   },
 
   // -------------------------------------------------------------------------
@@ -42,7 +42,7 @@ export const weddingConfig = {
   ceremony: {
     name: "Restaurante Pedra Branca",
     description:
-      "A cerimônia começa pontualmente. Chegue com cerca de 30 minutos de antecedência para encontrar seu lugar com calma.",
+      "A cerimônia e a recepção acontecem no mesmo endereço. Chegue com cerca de 30 minutos de antecedência: às 9h em ponto as portas se fecham.",
     address: "R. Padre Aluísio Boeing, 1727, Jaraguá do Sul, SC",
     city: "Jaraguá do Sul",
     state: "SC",
@@ -63,8 +63,11 @@ export const weddingConfig = {
   },
 
   social: {
-    /** Hashtag do casamento (sem #). Deixe vazio para esconder. */
-    hashtag: "Lari&Braga2027",
+    /**
+     * Hashtag do casamento, SEM o "#". Deixe vazio para esconder.
+     * Evite "&" e acentos: o Instagram corta a hashtag no primeiro símbolo.
+     */
+    hashtag: "LariEBraga2027",
   },
 
   // -------------------------------------------------------------------------
@@ -72,14 +75,18 @@ export const weddingConfig = {
   // -------------------------------------------------------------------------
   payments: {
     // --- PIX -----------------------------------------------------------------
-    /** Chave PIX (e-mail, CPF, telefone ou aleatória) */
+    /**
+     * Chave PIX (e-mail, CPF, telefone ou aleatória).
+     * ⚠️ AINDA É UM EXEMPLO — troque pela chave real antes de divulgar o site,
+     * senão o QR Code aponta para uma chave que não existe.
+     */
     pixKey: "larissaethiago@exemplo.com.br",
     pixName: "Larissa e Thiago",
-    /** Cidade do recebedor — exigida pelo padrão PIX (BR Code) */
-    pixCity: "FLORIANOPOLIS",
+    /** Cidade do recebedor — exigida pelo padrão PIX (BR Code), sem acento */
+    pixCity: "JARAGUA DO SUL",
     /** Texto exibido na aba do PIX */
     pixInstructions:
-      "Abra o app do seu banco, escolha PIX → Pagar com chave, cole a chave abaixo e informe o valor do presente. Depois, se quiser, nos manda um print no WhatsApp. 😄",
+      "Abra o app do seu banco, escolha PIX → Pagar com chave, cole a chave acima e informe o valor. Se quiser, depois nos manda um print no WhatsApp. 😄",
 
     /** Deixe false para esconder a opção de PIX direto e usar só o PagBank. */
     pixEnabled: true,
@@ -105,7 +112,7 @@ export const weddingConfig = {
 
     /** Texto exibido antes de mandar o convidado para o link de pagamento */
     pagbankInstructions:
-      "Você vai para o ambiente seguro do PagBank e escolhe lá a forma de pagamento: cartão de crédito (com parcelamento), PIX ou boleto. Não passamos perto dos seus dados de pagamento.",
+      "Você será levado ao ambiente seguro do PagBank, onde escolhe como pagar: cartão de crédito (com parcelamento), PIX ou boleto. Seus dados de pagamento não passam pelo nosso site.",
   },
 
   // -------------------------------------------------------------------------
@@ -116,7 +123,7 @@ export const weddingConfig = {
     description:
       "Estamos nos casando! Aqui você encontra a nossa história, os detalhes do grande dia, a lista de presentes e o formulário de confirmação de presença.",
     /** Sem barra no final. Use o domínio próprio em produção. */
-    url: "https://casamento-thiago-e-lari.vercel.app/",
+    url: "https://casamento-thiago-e-lari.vercel.app",
     locale: "pt-BR",
   },
 
@@ -146,7 +153,7 @@ export const weddingConfig = {
   // -------------------------------------------------------------------------
   share: {
     message:
-      "Estamos muito felizes em compartilhar nosso grande dia com você! ❤️\n\nConfira todas as informações do nosso casamento:",
+      "Estamos muito felizes em compartilhar o nosso grande dia com você! ❤️\n\nConfira todas as informações do casamento:",
   },
 
   // -------------------------------------------------------------------------
@@ -170,7 +177,7 @@ export const weddingConfig = {
   // -------------------------------------------------------------------------
   privacy: {
     notice:
-      "Usamos seus dados apenas para organizar o casamento (lugares, buffet e recados). Não compartilhamos com ninguém e apagamos tudo depois da festa.",
+      "Usamos seus dados apenas para organizar o casamento (lugares, café e recados). Não compartilhamos com ninguém e apagamos tudo depois da festa.",
   },
 } as const;
 
@@ -192,34 +199,41 @@ export const heroImages = [
 // ---------------------------------------------------------------------------
 export const storyContent = {
   title: "Nossa história",
-  subtitle: "Como duas pessoas que odeiam sair de casa acabaram organizando uma festa.",
+  subtitle: "Como duas pessoas teimosas finalmente concordaram em algo.",
   paragraphs: [
-    "A gente se conheceu por acidente, num aniversário em que nenhum dos dois queria estar. Uma conversa sobre trilha sonora de videogame virou madrugada, madrugada virou rotina, e a rotina virou a melhor parte do dia.",
-    "De lá para cá foram apartamentos pequenos, mudanças de cidade, um gato com problemas de personalidade e uma quantidade preocupante de pizza. Nada disso saiu como planejamos — e ainda assim é exatamente onde a gente queria estar.",
-    "Agora queremos dividir o próximo capítulo com as pessoas que fizeram parte de todos os anteriores. Ou seja: você.",
+    "A gente se conheceu por acaso. Foram algumas conversas soltas que, em poucos dias, já tinham virado rotina — e deixaram claro que ali existia uma conexão diferente. Até que veio a pergunta dela, sem rodeios: “afinal, o que somos e no que isso vai dar?”. A resposta foi a mais sincera possível: um sim, com a certeza de que não haveria arrependimento.",
+    "De lá para cá foram muitas apresentações de dança, amizades novas e viagens que a gente vai contar pelo resto da vida. Nada disso estava no planejamento — e é justamente por isso que deu tão certo.",
+    "Agora queremos dividir o próximo capítulo com as pessoas que estiveram em todos os anteriores. Ou seja: você.",
   ],
   images: [
-    { src: "/images/casal/beijo-mao.jpeg", alt: "Retrato do casal sorrindo" },
-    { src: "/images/casal/estatua-jardim-botanico.jpeg", alt: "O casal caminhando na praia" },
+    { src: "/images/casal/beijo-mao.jpeg", alt: "Thiago beijando a mão de Larissa" },
+    {
+      src: "/images/casal/estatua-jardim-botanico.jpeg",
+      alt: "Larissa e Thiago no Jardim Botânico",
+    },
   ],
 };
 
 // ---------------------------------------------------------------------------
 // Galeria
 // ---------------------------------------------------------------------------
+/**
+ * Cada foto precisa de um `src` ÚNICO e de um `alt` que descreva a imagem de
+ * verdade (é o que leitores de tela leem em voz alta).
+ *
+ * Para acrescentar fotos: coloque o arquivo em /public/images/galeria e crie
+ * uma linha aqui. Repetir o mesmo `src` quebra a navegação do visualizador.
+ */
 export const galleryImages = [
-  { src: "/images/galeria/beijo-mao.jpeg", alt: "Ensaio do casal ao amanhecer" },
-  { src: "/images/galeria/beijo-mao.jpeg", alt: "Detalhe das alianças" },
-  { src: "/images/galeria/beijo-mao.jpeg", alt: "O casal rindo durante o ensaio" },
-  { src: "/images/galeria/beijo-mao.jpeg", alt: "Passeio de mãos dadas no calçadão" },
-  { src: "/images/galeria/beijo-mao.jpeg", alt: "Pedido de casamento na cozinha" },
-  { src: "/images/galeria/beijo-mao.jpeg", alt: "Viagem à serra em 2020" },
-  { src: "/images/galeria/beijo-mao.jpeg", alt: "Aniversário em família" },
-  { src: "/images/galeria/beijo-mao.jpeg", alt: "O gato do casal dormindo no sofá" },
-  { src: "/images/galeria/beijo-mao.jpeg", alt: "Pôr do sol na praia" },
-  { src: "/images/galeria/beijo-mao.jpeg", alt: "Brinde entre amigos" },
-  { src: "/images/galeria/beijo-mao.jpeg", alt: "Detalhe da decoração escolhida" },
-  { src: "/images/galeria/beijo-mao.jpeg", alt: "Retrato em preto e branco do casal" },
+  { src: "/images/galeria/beijo-mao.jpeg", alt: "Thiago beijando a mão de Larissa" },
+  {
+    src: "/images/casal/estatua-jardim-botanico.jpeg",
+    alt: "Larissa e Thiago em frente à estátua do Jardim Botânico",
+  },
+  {
+    src: "/images/banner/escada-jardim-botanico.jpeg",
+    alt: "O casal na escadaria do Jardim Botânico",
+  },
 ];
 
 // ---------------------------------------------------------------------------
@@ -227,53 +241,56 @@ export const galleryImages = [
 // ---------------------------------------------------------------------------
 export const usefulInfo = {
   title: "Informações úteis",
-  subtitle: "Para você chegar tranquilo e aproveitar sem preocupação.",
+  subtitle: "Alguns detalhes para você chegar tranquilo e aproveitar com a gente.",
   items: [
     {
-      icon: "🛏️",
-      title: "Hospedagem",
-      description:
-        "Reservamos condições especiais em hotéis próximos ao local do casamento. Mencione o nome do casal na reserva.",
+      icon: "⏰",
+      title: "Horários",
+      description: "Este é o ponto mais importante: a cerimônia começa às 9h em ponto.",
       details: [
-        "Hotel Ilha Verde — 10 min do local — (48) 3333-1111",
-        "Pousada Maré Alta — 15 min do local — (48) 3333-2222",
-        "Hostel Centro — opção econômica — (48) 3333-3333",
-      ],
-    },
-    {
-      icon: "👔",
-      title: "Trajes",
-      description: "Esporte fino. Nada de gravata obrigatória, nada de chinelo.",
-      details: [
-        "Elas: vestido midi ou longo. Evite branco e off-white. 🙏",
-        "Eles: calça social e camisa. Blazer é bem-vindo, mas opcional.",
-        "Vai ter grama e cascalho no caminho — pense duas vezes no salto fino.",
+        "Chegue entre 8h15 e 8h45 para escolher seu lugar com calma.",
+        "Às 9h as portas se fecham e não será possível entrar. É o nosso único pedido inflexível.",
+        "A celebração se encerra por volta do meio-dia.",
       ],
     },
     {
       icon: "🚗",
       title: "Estacionamento",
-      description:
-        "Estacionamento gratuito no próprio local, com manobrista a partir das 15h30.",
-      details: ["Cerca de 80 vagas no local.", "Chegue com folga: a entrada é por uma via só."],
-    },
-    {
-      icon: "💅",
-      title: "Salão e beleza",
-      description: "Indicações de quem cuida da gente e conhece o cronograma do dia.",
+      description: "Estacionamento gratuito no próprio local, com manobrista a partir das 8h.",
       details: [
-        "Studio Ateliê da Noiva — (48) 3333-4444",
-        "Espaço Bem-me-quer — (48) 3333-5555",
+        "São cerca de 80 vagas, suficientes para todos os convidados.",
+        "A entrada é por uma via única, então reserve alguns minutos extras na chegada.",
       ],
     },
     {
-      icon: "🚐",
-      title: "Transporte",
-      description:
-        "Vai haver van saindo do centro para o local às 15h, e retorno ao centro à 1h.",
+      icon: "👔",
+      title: "Trajes",
+      description: "Esporte fino — sem necessidade de gravata, mas também sem chinelo.",
       details: [
-        "Aplicativos funcionam bem na região até por volta das 2h.",
-        "Se beber, não dirija. Sério. A gente quer você no próximo aniversário.",
+        "Elas: evite branco e off-white (esses são da noiva), verde e tons de terracota ou laranja.",
+        "Eles: evite bordô.",
+        "Fora dessas cores, fique à vontade: o importante é você estar confortável.",
+      ],
+    },
+    {
+      icon: "💍",
+      title: "Sobre a celebração",
+      description: "Combinados que ajudam a manter o dia leve para todos.",
+      details: [
+        "A cerimônia e a recepção acontecem no mesmo endereço — você não precisa se deslocar.",
+        "Os lugares são contados um a um, então pedimos que convidado não convide.",
+        "Deixe o celular no silencioso durante a cerimônia.",
+        "Evite circular ou entrar no caminho dos fotógrafos: pode estragar os registros.",
+        "Presete atenção na cerimônia.",
+      ],
+    },
+    {
+      icon: "☕",
+      title: "Comes e bebes",
+      description: "Vamos servir um café colonial completo, do doce ao salgado.",
+      details: [
+        "Sirva-se com empatia: a comida é para todo mundo.",
+        "Não haverá bebida alcoólica no evento.",
       ],
     },
   ],
@@ -285,17 +302,20 @@ export const usefulInfo = {
 export const rsvpContent = {
   title: "Confirmação de presença",
   subtitle:
-    "Precisamos saber quem vem para organizar os lugares e o buffet. Confirme até 30 dias antes do casamento, por favor.",
+    "Precisamos saber quem vem para organizar os lugares e o café. Confirme até 30 dias antes do casamento, por favor.",
   successAttending: {
     title: "Obrigado, {nome}! ❤️",
     lines: [
-      "Sua presença foi registrada.",
-      "Estamos muito felizes em ter você com a gente nesse momento.",
+      "Sua presença está confirmada.",
+      "Estamos muito felizes em ter você com a gente nesse dia.",
     ],
   },
   successNotAttending: {
-    title: "Sentiremos sua falta! ❤️",
-    lines: ["Obrigado por nos avisar.", "Fica combinado um encontro depois da festa."],
+    title: "Vamos sentir sua falta! ❤️",
+    lines: [
+      "Obrigado por nos avisar com antecedência.",
+      "Fica combinado um encontro depois da festa.",
+    ],
   },
 };
 
@@ -305,8 +325,7 @@ export const rsvpContent = {
 export const easterEggPhrases = [
   "Ok, você achou um easter egg. Isso não te dá desconto no presente.",
   "A noiva escolheu a decoração. O noivo escolheu a comida. Todos saíram ganhando.",
-  "Sim, vai ter brigadeiro.",
-  "O gato não foi convidado. Ele se convidou.",
+  "Sim, vai ter docinho.",
   "Se você chegou aqui clicando em tudo, a gente gosta de você.",
   "Spoiler: a primeira dança vai ser um desastre lindo.",
 ];

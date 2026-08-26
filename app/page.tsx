@@ -108,7 +108,6 @@ export default function HomePage() {
           <SectionTitle
             eyebrow={giftsContent.eyebrow}
             title={giftsContent.title}
-            subtitle={giftsContent.note}
             className="mb-12 md:mb-16"
           />
 

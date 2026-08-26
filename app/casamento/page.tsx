@@ -26,26 +26,28 @@ export default function CasamentoPage() {
 
   return (
     <>
-      <Section tone="light" className="pt-32 md:pt-40">
+      {/* Faixa verde escura: todo texto aqui precisa da variante clara */}
+      <Section tone="green" className="pt-32 md:pt-40">
         <SectionTitle
           as="h1"
           eyebrow="O grande dia"
           title="O casamento"
           subtitle="Tudo o que você precisa saber para chegar no lugar certo, na hora certa."
+          onDark
         />
 
         <Reveal className="mt-12 flex flex-col items-center gap-4 text-center">
           <time
             dateTime={weddingIsoString()}
-            className="font-display text-3xl font-light text-green-800 md:text-4xl"
+            className="font-display text-3xl font-light text-beige-50 md:text-4xl"
           >
             {formatWeddingDateLong()}
           </time>
-          <p className="text-sm uppercase tracking-widest text-ink-muted">
+          <p className="text-sm uppercase tracking-widest text-beige-200/80">
             {formatWeddingWeekday()} · {formatTime(ceremony.time)}
           </p>
 
-          <Countdown tone="dark" className="mt-6" />
+          <Countdown tone="light" className="mt-6" />
         </Reveal>
       </Section>
 

@@ -7,7 +7,6 @@ import { Ornament } from "@/components/ui/Ornament";
 import { EasterEgg } from "@/components/ui/EasterEgg";
 import { ButtonLink } from "@/components/ui/Button";
 import { GiftGrid } from "@/components/gifts/GiftGrid";
-import { ContributionSection } from "@/components/gifts/ContributionSection";
 import { FormFeedback } from "@/components/ui/FormFeedback";
 import { getActiveGifts, giftsContent } from "@/config/gifts";
 import { weddingConfig } from "@/config/wedding";
@@ -17,7 +16,6 @@ import type { Gift } from "@/types";
 
 export const metadata: Metadata = {
   title: "Lista de presentes",
-  description: giftsContent.note,
   alternates: { canonical: "/presentes" },
 };
 
@@ -99,10 +97,6 @@ export default function PresentesPage() {
             </p>
           ))}
           <p className="mt-2 font-script text-2xl text-bordo-500">{giftsContent.disclaimer}</p>
-
-          <p className="mt-8 text-sm text-ink-muted">
-            {gifts.length} presentes na lista, a partir de {formatCurrency(cheapest)}.
-          </p>
         </Reveal>
 
         {/* Formas de pagamento */}
@@ -132,39 +126,6 @@ export default function PresentesPage() {
         />
 
         <GiftGrid gifts={gifts} showFilters showCount />
-      </Section>
-
-      {/* ------------------------------------------------------------------ */}
-      {/* Contribuição de valor livre                                        */}
-      {/* ------------------------------------------------------------------ */}
-      <ContributionSection />
-
-      {/* ------------------------------------------------------------------ */}
-      {/* Fechamento                                                         */}
-      {/* ------------------------------------------------------------------ */}
-      <Section tone="light" className="text-center">
-        <Reveal className="mx-auto flex max-w-xl flex-col items-center gap-5">
-          <Ornament />
-          <p className="text-base leading-relaxed text-ink-soft">
-            De verdade: a sua presença já é o presente. O resto é bônus.
-          </p>
-
-          {weddingConfig.contact.whatsapp ? (
-            <ButtonLink
-              href={whatsappLink(
-                weddingConfig.contact.whatsapp,
-                "Oi! Tenho uma dúvida sobre a lista de presentes.",
-              )}
-              external
-              variant="outline"
-              size="sm"
-            >
-              Falar com o casal
-            </ButtonLink>
-          ) : null}
-
-          <EasterEgg className="mt-4" />
-        </Reveal>
       </Section>
     </>
   );

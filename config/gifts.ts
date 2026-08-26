@@ -24,13 +24,11 @@ export const giftsContent = {
   title: "Nossa lista",
   eyebrow: "💍 Presentes",
   intro: [
-    "Como já temos quase tudo que precisamos, decidimos transformar nossa lista em pequenas contribuições para a nossa vida de casados.",
-    "Você escolhe o motivo. Nós prometemos usar o dinheiro com sabedoria.",
+    "Como estamos iniciando nossa vida do zero, decidimos transformar nossa lista em algumas contribuições.",
+    "Você escolhe o motivo/objetivo do presente. Nós prometemos usar o dinheiro com sabedoria.",
   ],
   /** Linha final, em tom de piada */
   disclaimer: "(ou não.)",
-  note:
-    "Vocês não precisam nos dar nada. Mas se quiserem financiar nossas decisões questionáveis, fiquem à vontade.",
 };
 
 export const gifts: Gift[] = [
@@ -178,19 +176,19 @@ export const gifts: Gift[] = [
 
 export const giftPriceRanges: { id: GiftPriceRange; label: string }[] = [
   { id: "todos", label: "Todos" },
-  { id: "ate-100", label: "Até R$ 100" },
   { id: "100-500", label: "R$ 100 – R$ 500" },
-  { id: "500-mais", label: "R$ 500+" },
+  { id: "500-1000", label: "R$ 500 – R$ 1000" },
+  { id: "1000-mais", label: "R$ 1000+" },
 ];
 
 export function matchesPriceRange(value: number, range: GiftPriceRange): boolean {
   switch (range) {
-    case "ate-100":
-      return value <= 100;
     case "100-500":
       return value > 100 && value <= 500;
-    case "500-mais":
-      return value > 500;
+    case "500-1000":
+      return value > 500 && value <= 1000;
+    case "1000-mais":
+      return value > 1000;
     case "todos":
     default:
       return true;

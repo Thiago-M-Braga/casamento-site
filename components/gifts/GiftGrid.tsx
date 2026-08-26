@@ -39,10 +39,15 @@ export function GiftGrid({
     <div className={className}>
       {showFilters ? (
         <div className="mb-10 flex flex-col items-center gap-4">
+          {/*
+            `overflow-x-auto` também recorta na vertical, e o botão cresce no
+            hover. O `py-2` reserva essa folga por dentro, e o `-my-2` desfaz o
+            espaço extra no layout — o botão cresce sem ser cortado no topo.
+          */}
           <div
             role="group"
             aria-label="Filtrar presentes por valor"
-            className="no-scrollbar -mx-5 flex gap-2.5 overflow-x-auto px-5 pb-1 sm:mx-0 sm:flex-wrap sm:justify-center sm:px-0"
+            className="no-scrollbar -mx-5 -my-2 flex gap-2.5 overflow-x-auto px-5 py-2 sm:mx-0 sm:flex-wrap sm:justify-center sm:px-0"
           >
             {giftPriceRanges.map((option) => {
               const active = option.id === range;
