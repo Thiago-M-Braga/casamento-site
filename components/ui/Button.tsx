@@ -23,12 +23,12 @@ const base = [
 
 const variants: Record<Variant, string> = {
   primary:
-    "bg-green-700 text-beige-50 shadow-soft hover:bg-green-600 hover:shadow-lift",
+    "bg-green-400 text-beige-50 shadow-soft hover:bg-green-600 hover:shadow-lift",
   outline:
-    "border border-green-300 bg-transparent text-green-800 hover:border-green-700 hover:bg-green-700 hover:text-beige-50 hover:shadow-soft",
+    "border border-green-300 bg-transparent text-green-600 hover:border-green-400 hover:bg-green-400 hover:text-beige-50 hover:shadow-soft",
   bordo:
-    "bg-bordo-500 text-beige-50 shadow-soft hover:bg-bordo-400 hover:shadow-lift",
-  ghost: "text-green-700 hover:text-bordo-500",
+    "bg-bordo-600 text-beige-50 shadow-soft hover:bg-bordo-700 hover:shadow-lift",
+  ghost: "text-green-700 hover:text-green-800",
 };
 
 const sizes: Record<Size, string> = {

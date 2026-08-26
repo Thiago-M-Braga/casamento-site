@@ -4,7 +4,6 @@ import "./globals.css";
 
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { MusicPlayer } from "@/components/layout/MusicPlayer";
 import { Analytics } from "@/components/layout/Analytics";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { PageTransition } from "@/components/layout/PageTransition";
@@ -136,7 +135,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </main>
 
         <Footer />
-        <MusicPlayer />
         <Analytics />
         <EventStructuredData />
       </body>

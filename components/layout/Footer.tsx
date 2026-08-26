@@ -28,12 +28,12 @@ export function Footer() {
           ) : null}
         </div>
 
-        <div className="mt-12 grid gap-10 border-t border-green-100 pt-10 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-12 grid gap-60 border-t border-green-100 pt-10 sm:grid-cols-2 lg:grid-cols-3">
           <nav aria-label="Navegação do rodapé">
             <h2 className="mb-4 text-xs uppercase tracking-widest text-ink-muted">
               Navegue
             </h2>
-            <ul className="flex flex-col gap-2.5">
+            <ul className="grid grid-cols-2 gap-2">
               {navItems.map((item) => (
                 <li key={item.href}>
                   <Link
@@ -75,34 +75,7 @@ export function Footer() {
                   </a>
                 </li>
               ) : null}
-
-              {social.instagram ? (
-                <li>
-                  <a
-                    href={social.instagram}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="link-underline transition-colors hover:text-green-800"
-                  >
-                    Instagram
-                  </a>
-                </li>
-              ) : null}
             </ul>
-          </div>
-
-          <div>
-            <h2 className="mb-4 text-xs uppercase tracking-widest text-ink-muted">
-              Convide alguém
-            </h2>
-            <p className="mb-4 max-w-xs text-sm leading-relaxed text-ink-soft">
-              Manda o site para quem também precisa das informações.
-            </p>
-            <ShareButtons
-              url={getSiteUrl()}
-              message={getShareMessage()}
-              whatsappUrl={getWhatsappShareUrl()}
-            />
           </div>
         </div>
 

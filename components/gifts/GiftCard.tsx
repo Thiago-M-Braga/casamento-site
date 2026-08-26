@@ -41,7 +41,7 @@ export function GiftCard({ gift, onPaymentRequest, className }: GiftCardProps) {
           </span>
         ) : null}
 
-        <span className="absolute bottom-4 right-4 rounded-full bg-green-800/90 px-3.5 py-1.5 text-xs font-medium tracking-wide text-beige-50 backdrop-blur">
+        <span className="absolute bottom-4 right-4 rounded-full bg-green-600 px-3.5 py-1.5 text-xs font-medium tracking-wide text-beige-50 backdrop-blur">
           {formatCurrency(gift.value)}
         </span>
       </div>

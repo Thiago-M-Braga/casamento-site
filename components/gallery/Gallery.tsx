@@ -33,7 +33,7 @@ export function Gallery({ images, limit, className }: GalleryProps) {
       >
         {visible.map((image, index) => (
           <li
-            key={image.src}
+            key={image.src + index}
             // A partir do tablet, cada 6ª foto ocupa dois espaços e quebra a
             // monotonia do grid. No celular todas ficam do mesmo tamanho.
             className={cn(index % 6 === 0 && "md:col-span-2 md:row-span-2")}

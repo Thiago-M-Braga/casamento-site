@@ -19,7 +19,7 @@ const tones: Record<NonNullable<SectionProps["tone"]>, string> = {
   /** Bege mais claro, para alternar o ritmo entre seções */
   light: "bg-beige-50 text-ink",
   /** Faixa em verde escuro */
-  green: "bg-green-800 text-beige-100",
+  green: "bg-green-600 text-beige-100",
   /** Faixa em bordô suave */
   bordo: "bg-bordo-50 text-ink",
 };

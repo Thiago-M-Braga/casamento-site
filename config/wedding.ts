@@ -20,7 +20,7 @@ export const weddingConfig = {
     /** Usado no monograma do topo e no favicon textual */
     initials: "L & T",
     /** Frase curta que aparece no hero */
-    tagline: "Uma nova aventura começa aqui.",
+    tagline: "Uma nova fase começa aqui.",
   },
 
   // -------------------------------------------------------------------------
@@ -30,7 +30,7 @@ export const weddingConfig = {
     /** Formato ISO: AAAA-MM-DD */
     date: "2027-08-21",
     /** Formato 24h: HH:MM */
-    time: "16:00",
+    time: "09:00",
     timezone: "America/Sao_Paulo",
     /** Mensagem exibida quando a contagem regressiva chega a zero */
     countdownFinishedMessage: "Hoje é o grande dia. Obrigado por celebrar com a gente. ❤️",
@@ -40,17 +40,17 @@ export const weddingConfig = {
   // Cerimônia
   // -------------------------------------------------------------------------
   ceremony: {
-    name: "Capela Nossa Senhora da Glória",
+    name: "Restaurante Pedra Branca",
     description:
       "A cerimônia começa pontualmente. Chegue com cerca de 30 minutos de antecedência para encontrar seu lugar com calma.",
-    address: "Rua das Acácias, 120 — Centro",
-    city: "Florianópolis",
+    address: "R. Padre Aluísio Boeing, 1727, Jaraguá do Sul, SC",
+    city: "Jaraguá do Sul",
     state: "SC",
-    time: "16:00",
-    mapsUrl: "https://www.google.com/maps/search/?api=1&query=Florian%C3%B3polis%2C+SC",
+    time: "09:00",
+    mapsUrl: "https://maps.app.goo.gl/YFHJJiDPX81xm9ii8",
     /** Opcional: URL de embed do Google Maps. Deixe vazio para usar apenas o link. */
     mapsEmbedUrl: "",
-    image: "/images/decoracao/imagem-decoracao-1.webp",
+    image: "/images/decoracao/pedra-branca-icon.jpg",
   } satisfies WeddingVenue,
 
   // -------------------------------------------------------------------------
@@ -58,14 +58,13 @@ export const weddingConfig = {
   // -------------------------------------------------------------------------
   contact: {
     /** Somente números, com DDI e DDD. Ex.: 5548999998888 */
-    whatsapp: "5548999998888",
-    email: "larissaethiago@exemplo.com.br",
+    whatsapp: "5547999155588",
+    email: "larissaethiago@gmail.com",
   },
 
   social: {
-    instagram: "https://instagram.com/",
     /** Hashtag do casamento (sem #). Deixe vazio para esconder. */
-    hashtag: "LarissaEThiago2027",
+    hashtag: "Lari&Braga2027",
   },
 
   // -------------------------------------------------------------------------
@@ -117,7 +116,7 @@ export const weddingConfig = {
     description:
       "Estamos nos casando! Aqui você encontra a nossa história, os detalhes do grande dia, a lista de presentes e o formulário de confirmação de presença.",
     /** Sem barra no final. Use o domínio próprio em produção. */
-    url: "https://www.larissaethiago.com.br",
+    url: "https://casamento-thiago-e-lari.vercel.app/",
     locale: "pt-BR",
   },
 
@@ -140,16 +139,6 @@ export const weddingConfig = {
   analytics: {
     enabled: false,
     googleAnalyticsId: "",
-  },
-
-  // -------------------------------------------------------------------------
-  // Música ambiente (opcional, nunca inicia sozinha)
-  // -------------------------------------------------------------------------
-  music: {
-    /** Coloque o arquivo em /public e referencie aqui. Ex.: /audio/nossa-musica.mp3 */
-    src: "",
-    title: "Nossa música",
-    defaultVolume: 0.35,
   },
 
   // -------------------------------------------------------------------------
@@ -193,7 +182,7 @@ export const weddingConfig = {
 // Não repita o mesmo `src` em duas linhas: cada foto precisa ser única.
 // ---------------------------------------------------------------------------
 export const heroImages = [
-  { src: "/images/banner/Morte.PNG", alt: "Larissa e Thiago" },
+  { src: "/images/banner/escada-jardim-botanico.jpeg", alt: "Larissa e Thiago" },
   // Para alternar entre várias fotos, acrescente linhas aqui:
   // { src: "/images/banner/imagem-banner-2.webp", alt: "Mãos entrelaçadas do casal" },
 ] as const;
@@ -210,65 +199,27 @@ export const storyContent = {
     "Agora queremos dividir o próximo capítulo com as pessoas que fizeram parte de todos os anteriores. Ou seja: você.",
   ],
   images: [
-    { src: "/images/casal/imagem-casal-1.webp", alt: "Retrato do casal sorrindo" },
-    { src: "/images/casal/imagem-casal-2.webp", alt: "O casal caminhando na praia" },
+    { src: "/images/casal/beijo-mao.jpeg", alt: "Retrato do casal sorrindo" },
+    { src: "/images/casal/estatua-jardim-botanico.jpeg", alt: "O casal caminhando na praia" },
   ],
 };
-
-export const timeline: TimelineEvent[] = [
-  {
-    year: "2019",
-    title: "O primeiro encontro",
-    description:
-      "Uma festa de aniversário, duas pessoas encostadas na parede fugindo da conversa social e um papo sobre trilhas sonoras que durou até o sol nascer.",
-    image: "/images/historia/imagem-historia-1.webp",
-  },
-  {
-    year: "2020",
-    title: "A primeira viagem",
-    description:
-      "Três dias na serra, uma barraca montada errado e a certeza de que dava para conviver com alguém 24 horas por dia sem cometer nenhum crime.",
-    image: "/images/historia/imagem-historia-2.webp",
-  },
-  {
-    year: "2022",
-    title: "A primeira casa",
-    description:
-      "Um apartamento minúsculo, móveis montados no chão da sala e a descoberta de que dividir cobertas é uma negociação diária.",
-    image: "/images/historia/imagem-historia-3.webp",
-  },
-  {
-    year: "2023",
-    title: "O pedido",
-    description:
-      "Sem drone, sem placa, sem plateia. Só uma cozinha bagunçada, um jantar queimado e um sim antes da pergunta terminar.",
-    image: "/images/historia/imagem-historia-4.webp",
-  },
-  {
-    year: "2027",
-    title: "O grande dia",
-    description:
-      "A parte em que a gente assina papéis, chora um pouco e come bem acompanhado de todo mundo que amamos.",
-    image: "/images/historia/imagem-historia-5.webp",
-  },
-];
 
 // ---------------------------------------------------------------------------
 // Galeria
 // ---------------------------------------------------------------------------
 export const galleryImages = [
-  { src: "/images/galeria/imagem-galeria-01.webp", alt: "Ensaio do casal ao amanhecer" },
-  { src: "/images/galeria/imagem-galeria-02.webp", alt: "Detalhe das alianças" },
-  { src: "/images/galeria/imagem-galeria-03.webp", alt: "O casal rindo durante o ensaio" },
-  { src: "/images/galeria/imagem-galeria-04.webp", alt: "Passeio de mãos dadas no calçadão" },
-  { src: "/images/galeria/imagem-galeria-05.webp", alt: "Pedido de casamento na cozinha" },
-  { src: "/images/galeria/imagem-galeria-06.webp", alt: "Viagem à serra em 2020" },
-  { src: "/images/galeria/imagem-galeria-07.webp", alt: "Aniversário em família" },
-  { src: "/images/galeria/imagem-galeria-08.webp", alt: "O gato do casal dormindo no sofá" },
-  { src: "/images/galeria/imagem-galeria-09.webp", alt: "Pôr do sol na praia" },
-  { src: "/images/galeria/imagem-galeria-10.webp", alt: "Brinde entre amigos" },
-  { src: "/images/galeria/imagem-galeria-11.webp", alt: "Detalhe da decoração escolhida" },
-  { src: "/images/galeria/imagem-galeria-12.webp", alt: "Retrato em preto e branco do casal" },
+  { src: "/images/galeria/beijo-mao.jpeg", alt: "Ensaio do casal ao amanhecer" },
+  { src: "/images/galeria/beijo-mao.jpeg", alt: "Detalhe das alianças" },
+  { src: "/images/galeria/beijo-mao.jpeg", alt: "O casal rindo durante o ensaio" },
+  { src: "/images/galeria/beijo-mao.jpeg", alt: "Passeio de mãos dadas no calçadão" },
+  { src: "/images/galeria/beijo-mao.jpeg", alt: "Pedido de casamento na cozinha" },
+  { src: "/images/galeria/beijo-mao.jpeg", alt: "Viagem à serra em 2020" },
+  { src: "/images/galeria/beijo-mao.jpeg", alt: "Aniversário em família" },
+  { src: "/images/galeria/beijo-mao.jpeg", alt: "O gato do casal dormindo no sofá" },
+  { src: "/images/galeria/beijo-mao.jpeg", alt: "Pôr do sol na praia" },
+  { src: "/images/galeria/beijo-mao.jpeg", alt: "Brinde entre amigos" },
+  { src: "/images/galeria/beijo-mao.jpeg", alt: "Detalhe da decoração escolhida" },
+  { src: "/images/galeria/beijo-mao.jpeg", alt: "Retrato em preto e branco do casal" },
 ];
 
 // ---------------------------------------------------------------------------

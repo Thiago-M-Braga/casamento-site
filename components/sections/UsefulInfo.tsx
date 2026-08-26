@@ -14,7 +14,7 @@ export function UsefulInfo() {
       {usefulInfo.items.map((item, index) => (
         <Reveal key={item.title} delay={index * 60}>
           <details className="surface group overflow-hidden [&_summary::-webkit-details-marker]:hidden">
-            <summary className="flex cursor-pointer list-none items-center gap-4 p-5 transition-colors hover:bg-beige-100 md:p-6">
+            <summary className="flex cursor-pointer list-none items-center gap-4 p-5 transition-colors hover:bg-green-100 md:p-6 duration-500">
               <span aria-hidden="true" className="text-2xl">
                 {item.icon}
               </span>

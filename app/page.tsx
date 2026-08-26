@@ -87,7 +87,7 @@ export default function HomePage() {
         <SectionTitle
           eyebrow="O grande dia"
           title="O casamento"
-          subtitle="Cerimônia e festa no mesmo lugar. Guarde os detalhes no celular antes de sair de casa."
+          subtitle="Cerimônia e festa no mesmo lugar. Cuide com o horário!"
           className="mb-12 md:mb-16"
         />
 
