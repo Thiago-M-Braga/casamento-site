@@ -159,7 +159,7 @@ export const gifts: Gift[] = [
   {
     id: "ajuda-casamento",
     title: "Ajuda no casamento",
-    emoji: "🔧",
+    emoji: "👰‍♀️",
     description:
       "Ajuda para pagar o casamento.",
     value: 800,
@@ -203,12 +203,24 @@ export const gifts: Gift[] = [
   {
     id: "robo-aspirador",
     title: "Robô aspirador",
-    emoji: "🎲",
+    emoji: "🤖",
     description:
       "Um robô para nos liberar da limpeza semanal.",
-    value: 6000,
+    value: 3500,
     image: "/images/presentes/imagem-robo.jpg",
-    paymentUrl: "https://pag.ae/826j5PKjr",
+    paymentUrl: "https://pag.ae/826mFpt4o",
+    active: true,
+    featured: true,
+  },
+  {
+    id: "lava-louca",
+    title: "Lava louças",
+    emoji: "🍽️",
+    description:
+      "Uma lava louças para não acumular pratos na pia.",
+    value: 5000,
+    image: "/images/presentes/imagem-louca.jpg",
+    paymentUrl: "https://pag.ae/826mFPeNM",
     active: true,
     featured: true,
   },

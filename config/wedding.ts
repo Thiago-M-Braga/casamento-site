@@ -47,7 +47,7 @@ export const weddingConfig = {
     city: "Jaraguá do Sul",
     state: "SC",
     time: "09:00",
-    mapsUrl: "https://maps.app.goo.gl/YFHJJiDPX81xm9ii8",
+    mapsUrl: "https://maps.app.goo.gl/NzbC6a2BvCVkUoqSA",
     /** Opcional: URL de embed do Google Maps. Deixe vazio para usar apenas o link. */
     mapsEmbedUrl: "",
     image: "/images/decoracao/pedra-branca-icon.jpg",
@@ -267,7 +267,7 @@ export const usefulInfo = {
       title: "Trajes",
       description: "Esporte fino — sem necessidade de gravata, mas também sem chinelo.",
       details: [
-        "Elas: evite branco e off-white (esses são da noiva), verde e tons de terracota ou laranja.",
+        "Elas: evite branco e off-white (esses são da noiva), verde escuro, terracota ou laranja.",
         "Eles: evite bordô.",
         "Fora dessas cores, fique à vontade: o importante é você estar confortável.",
       ],
@@ -278,7 +278,7 @@ export const usefulInfo = {
       description: "Combinados que ajudam a manter o dia leve para todos.",
       details: [
         "A cerimônia e a recepção acontecem no mesmo endereço — você não precisa se deslocar.",
-        "Os lugares são contados um a um, então pedimos que convidado não convide.",
+        "Os lugares são contados um a um, logo convidado não convida.",
         "Deixe o celular no silencioso durante a cerimônia.",
         "Evite circular ou entrar no caminho dos fotógrafos: pode estragar os registros.",
         "Presete atenção na cerimônia.",
@@ -289,7 +289,7 @@ export const usefulInfo = {
       title: "Comes e bebes",
       description: "Vamos servir um café colonial completo, do doce ao salgado.",
       details: [
-        "Sirva-se com empatia: a comida é para todo mundo.",
+        "Sirva-se com empatia.",
         "Não haverá bebida alcoólica no evento.",
       ],
     },
