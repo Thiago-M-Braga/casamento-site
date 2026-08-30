@@ -33,6 +33,17 @@ export const giftsContent = {
 
 export const gifts: Gift[] = [
   {
+    id: "teste",
+    title: "teste",
+    emoji: "💸",
+    description:
+      "teste.",
+    value: 5,
+    image: "/images/presentes/imagem-julio-cris.webp",
+    paymentUrl: "https://pag.ae/826HAkxSa",
+    active: true,
+  },
+  {
     id: "nao-dei-nada",
     title: "Troco",
     emoji: "💸",
