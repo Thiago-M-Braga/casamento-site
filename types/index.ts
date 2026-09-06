@@ -24,7 +24,7 @@ export type Gift = {
   mystery?: boolean;
 };
 
-export type GiftPriceRange = "todos" | "100-500" | "500-1000" | "1000-mais";
+export type GiftPriceRange = "todos" | "80-100" | "100-500" | "500-1000" | "1000-mais";
 
 // ---------------------------------------------------------------------------
 // Presentes recebidos (avisos de pagamento enviados pelos convidados)

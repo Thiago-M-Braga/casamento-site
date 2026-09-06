@@ -32,15 +32,6 @@ export function GiftCard({ gift, onPaymentRequest, className }: GiftCardProps) {
           sizes="(max-width: 640px) 92vw, (max-width: 1024px) 45vw, 340px"
         />
 
-        {gift.emoji ? (
-          <span
-            aria-hidden="true"
-            className="absolute left-4 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-beige-50/95 text-xl shadow-soft backdrop-blur"
-          >
-            {gift.emoji}
-          </span>
-        ) : null}
-
         <span className="absolute bottom-4 right-4 rounded-full bg-green-600 px-3.5 py-1.5 text-xs font-medium tracking-wide text-beige-50 backdrop-blur">
           {formatCurrency(gift.value)}
         </span>

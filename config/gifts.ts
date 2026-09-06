@@ -33,20 +33,8 @@ export const giftsContent = {
 
 export const gifts: Gift[] = [
   {
-    id: "teste",
-    title: "teste",
-    emoji: "💸",
-    description:
-      "teste.",
-    value: 5,
-    image: "/images/presentes/imagem-julio-cris.webp",
-    paymentUrl: "https://pag.ae/826HAkxSa",
-    active: true,
-  },
-  {
     id: "nao-dei-nada",
     title: "Troco",
-    emoji: "💸",
     description:
       "Só para não dizer que não deu nada.",
     value: 80,
@@ -57,7 +45,6 @@ export const gifts: Gift[] = [
   {
     id: "docinho-da-noiva",
     title: "Docinho da Noiva",
-    emoji: "🍫",
     description:
       "Uma ajuda para manter a noiva calma e racional por uma semana.",
     value: 100,
@@ -70,7 +57,6 @@ export const gifts: Gift[] = [
   {
     id: "cobertor",
     title: "Cobertor",
-    emoji: "🧣",
     description:
       "Cobertor para a noiva estar coberta de razão.",
     value: 120,
@@ -81,7 +67,6 @@ export const gifts: Gift[] = [
   {
     id: "amigos-para-sempre",
     title: "Amigos para sempre",
-    emoji: "🫂",
     description:
       "Cota para sermos amigos para sempre.",
     value: 200,
@@ -92,7 +77,6 @@ export const gifts: Gift[] = [
   {
     id: "liberar-rpg",
     title: "RPG",
-    emoji: "👑",
     description:
     "Cota para liberar o Thiago para jogar RPG de mesa.",
     value: 250,
@@ -103,7 +87,6 @@ export const gifts: Gift[] = [
   {
     id: "rolo-macarrao",
     title: "Rolo de macarrão",
-    emoji: "💁‍♀️",
     description:
       "Para quando a Lari ficar com raiva do Thiago.",
     value: 250,
@@ -114,7 +97,6 @@ export const gifts: Gift[] = [
   {
     id: "capacete",
     title: "Capacete contra rolo de macarrão",
-    emoji: "🪖",
     description:
       "Para o Thiago ter proteção contra a Lari.",
     value: 350,
@@ -125,7 +107,6 @@ export const gifts: Gift[] = [
   {
     id: "ajuda-condominio",
     title: "Condomínio",
-    emoji: "🌆",
     description:
       "Ajuda para pagar o condomínio.",
     value: 400,
@@ -136,7 +117,6 @@ export const gifts: Gift[] = [
   {
     id: "cota-lua-de-mel",
     title: "Cota da Lua de Mel",
-    emoji: "🗼",
     description:
       "Um pedacinho da viagem. Cada cota equivale a mais ou menos uma tarde de preguiça com uma vista linda.",
     value: 500,
@@ -148,7 +128,6 @@ export const gifts: Gift[] = [
   {
     id: "assinatura-de-streaming-vitalicia",
     title: "Streaming (quase) vitalício",
-    emoji: "📺",
     description:
       "Para continuar discutindo o que assistir por muitos e muitos anos de casados.",
     value: 600,
@@ -159,7 +138,6 @@ export const gifts: Gift[] = [
   {
     id: "ajuda-cartao-noiva",
     title: "Fatura do cartão",
-    emoji: "💳",
     description:
       "Ajuda para pagar o gasto da Lari.",
     value: 700,
@@ -170,7 +148,6 @@ export const gifts: Gift[] = [
   {
     id: "ajuda-casamento",
     title: "Ajuda no casamento",
-    emoji: "👰‍♀️",
     description:
       "Ajuda para pagar o casamento.",
     value: 800,
@@ -181,7 +158,6 @@ export const gifts: Gift[] = [
   {
     id: "supermercado",
     title: "Supermercado",
-    emoji: "🛒",
     description:
       "Para pagar a primeira ida ao super mercado.",
     value: 1200,
@@ -192,7 +168,6 @@ export const gifts: Gift[] = [
   {
     id: "computador",
     title: "Melhoria setup",
-    emoji: "💻",
     description:
       "Cota para ajudar na melhoria do computador do Thiago.",
     value: 2000,
@@ -203,7 +178,6 @@ export const gifts: Gift[] = [
   {
     id: "mobilia",
     title: "Mobília",
-    emoji: "🛋️",
     description:
       "Ajuda para mobiliar a casa.",
     value: 2500,
@@ -214,7 +188,6 @@ export const gifts: Gift[] = [
   {
     id: "robo-aspirador",
     title: "Robô aspirador",
-    emoji: "🤖",
     description:
       "Um robô para nos liberar da limpeza semanal.",
     value: 3500,
@@ -226,7 +199,6 @@ export const gifts: Gift[] = [
   {
     id: "lava-louca",
     title: "Lava louças",
-    emoji: "🍽️",
     description:
       "Uma lava louças para não acumular pratos na pia.",
     value: 5000,
@@ -243,6 +215,7 @@ export const gifts: Gift[] = [
 
 export const giftPriceRanges: { id: GiftPriceRange; label: string }[] = [
   { id: "todos", label: "Todos" },
+  { id: "80-100", label: "R$ 80 - R$100" },
   { id: "100-500", label: "R$ 100 – R$ 500" },
   { id: "500-1000", label: "R$ 500 – R$ 1000" },
   { id: "1000-mais", label: "R$ 1000+" },
@@ -250,6 +223,8 @@ export const giftPriceRanges: { id: GiftPriceRange; label: string }[] = [
 
 export function matchesPriceRange(value: number, range: GiftPriceRange): boolean {
   switch (range) {
+    case "80-100":
+      return value > 80 && value <= 100;
     case "100-500":
       return value > 100 && value <= 500;
     case "500-1000":
