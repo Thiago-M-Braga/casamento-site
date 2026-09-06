@@ -170,7 +170,7 @@ export const weddingConfig = {
      * TypeScript trataria o valor como "auto para sempre" e acusaria erro em
      * quem compara com as outras opções.
      */
-    mode: "auto" as GuestPhotoMode,
+    mode: "aberto" as GuestPhotoMode,
 
     /**
      * Hora do dia do casamento em que o envio abre (fuso de `wedding.timezone`).
