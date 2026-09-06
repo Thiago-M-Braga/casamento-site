@@ -224,13 +224,13 @@ export const giftPriceRanges: { id: GiftPriceRange; label: string }[] = [
 export function matchesPriceRange(value: number, range: GiftPriceRange): boolean {
   switch (range) {
     case "80-100":
-      return value > 80 && value <= 100;
+      return value >= 80 && value < 100;
     case "100-500":
-      return value > 100 && value <= 500;
+      return value >= 100 && value < 500;
     case "500-1000":
-      return value > 500 && value <= 1000;
+      return value >= 500 && value < 1000;
     case "1000-mais":
-      return value > 1000;
+      return value >= 1000;
     case "todos":
     default:
       return true;

@@ -18,9 +18,7 @@ type Values = {
   children: string;
   companions: string;
   childrenNames: string;
-  email: string;
   phone: string;
-  notes: string;
 };
 
 const initialValues: Values = {
@@ -30,9 +28,7 @@ const initialValues: Values = {
   children: "0",
   companions: "",
   childrenNames: "",
-  email: "",
   phone: "",
-  notes: "",
 };
 
 export function RsvpForm() {
@@ -73,9 +69,7 @@ export function RsvpForm() {
       children: isAttending ? Number(values.children || 0) : 0,
       companions: isAttending ? values.companions : "",
       childrenNames: isAttending ? values.childrenNames : "",
-      email: values.email,
       phone: values.phone,
-      notes: values.notes,
       website: honeypot,
     };
 
@@ -190,6 +184,18 @@ export function RsvpForm() {
       {/* Acompanhantes — só faz sentido para quem vai */}
       {isAttending ? (
         <div className="grid animate-fade-up gap-6">
+          <div
+            role="note"
+            className="flex items-start gap-3 rounded-md border border-bordo-200 bg-bordo-50/60 px-4 py-3 text-sm text-bordo-700"
+          >
+            <span aria-hidden="true" className="mt-0.5 text-base leading-none">
+              ⚠️
+            </span>
+            <p className="font-body leading-relaxed">
+              Não convide ninguém além de quem estava no convite.
+            </p>
+          </div>
+
           <div className="grid gap-6 sm:grid-cols-2">
             <Field
               id="adults"
@@ -245,7 +251,7 @@ export function RsvpForm() {
             <Field
               id="childrenNames"
               label="Nome das crianças"
-              hint="Ajuda a gente a organizar o cardápio e o espaço kids."
+              hint="Ajuda a gente a nos organizar."
               error={fieldError("childrenNames")}
             >
               <Textarea
@@ -262,19 +268,6 @@ export function RsvpForm() {
       ) : null}
 
       <div className="grid gap-6 sm:grid-cols-2">
-        <Field id="email" label="E-mail" error={fieldError("email")}>
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            value={values.email}
-            invalid={Boolean(fieldError("email"))}
-            onChange={(event) => update("email", event.target.value)}
-            placeholder="opcional"
-          />
-        </Field>
-
         <Field id="phone" label="Telefone" error={fieldError("phone")}>
           <Input
             id="phone"
@@ -284,25 +277,10 @@ export function RsvpForm() {
             value={values.phone}
             invalid={Boolean(fieldError("phone"))}
             onChange={(event) => update("phone", event.target.value)}
-            placeholder="(48) 99999-8888"
+            placeholder="(47) 99999-8888"
           />
         </Field>
       </div>
-
-      <Field
-        id="notes"
-        label="Observações"
-        hint="Restrição alimentar, recado, música que você quer ouvir na pista..."
-        error={fieldError("notes")}
-      >
-        <Textarea
-          id="notes"
-          name="notes"
-          value={values.notes}
-          invalid={Boolean(fieldError("notes"))}
-          onChange={(event) => update("notes", event.target.value)}
-        />
-      </Field>
 
       {state === "error" && message ? <FormFeedback tone="error">{message}</FormFeedback> : null}
 
