@@ -1,6 +1,8 @@
 import { formatCurrency } from "@/lib/utils/format";
 import { GiftPaymentsTable } from "./GiftPaymentsTable";
+import { GuestPhotosPanel } from "./GuestPhotosPanel";
 import type { GiftPaymentRow, GuestMessageRow, GuestRow } from "@/lib/supabase/types";
+import type { AdminGuestPhoto } from "@/types";
 
 export type AdminData = {
   guests: GuestRow[];
@@ -12,6 +14,8 @@ export type AdminData = {
    * fecha o ciclo é o casal, marcando "conferido" após bater com o extrato.
    */
   giftPayments: GiftPaymentRow[];
+  /** Fotos enviadas pelos convidados no dia do casamento. */
+  guestPhotos: AdminGuestPhoto[];
 };
 
 function Stat({ label, value, hint }: { label: string; value: string; hint?: string }) {
@@ -25,7 +29,7 @@ function Stat({ label, value, hint }: { label: string; value: string; hint?: str
 }
 
 /** Painel de leitura: números do RSVP, presentes comprados e mensagens. */
-export function AdminDashboard({ guests, messages, giftPayments }: AdminData) {
+export function AdminDashboard({ guests, messages, giftPayments, guestPhotos }: AdminData) {
   const confirmed = guests.filter((guest) => guest.attending);
   const declined = guests.filter((guest) => !guest.attending);
 
@@ -43,6 +47,7 @@ export function AdminDashboard({ guests, messages, giftPayments }: AdminData) {
 
   const giftsPendingCheck = giftPayments.filter((row) => !row.confirmed);
   const pendingMessages = messages.filter((message) => !message.approved);
+  const hiddenPhotos = guestPhotos.filter((photo) => !photo.approved);
 
   return (
     <div className="flex flex-col gap-12">
@@ -83,7 +88,27 @@ export function AdminDashboard({ guests, messages, giftPayments }: AdminData) {
               : "todas moderadas"
           }
         />
+        <Stat
+          label="Fotos dos convidados"
+          value={String(guestPhotos.length)}
+          hint={
+            hiddenPhotos.length > 0
+              ? `${hiddenPhotos.length} escondida(s) da galeria`
+              : "todas na galeria"
+          }
+        />
       </div>
+
+      {/* Fotos dos convidados — primeiro porque é o que muda durante a festa */}
+      <section>
+        <h2 className="mb-2 text-2xl">Fotos dos convidados</h2>
+        <p className="mb-5 max-w-2xl text-sm leading-relaxed text-ink-soft">
+          O álbum coletivo do dia. &quot;Esconder&quot; tira a foto da galeria pública na hora e dá
+          para desfazer; &quot;Excluir&quot; apaga o arquivo de vez.
+        </p>
+
+        <GuestPhotosPanel photos={guestPhotos} />
+      </section>
 
       {/* Presentes comprados */}
       <section>

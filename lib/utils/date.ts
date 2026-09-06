@@ -38,22 +38,44 @@ function timeZoneOffsetMs(instant: number, timeZone: string): number {
 }
 
 /**
+ * Converte uma data/hora "de parede" no fuso do casamento para o instante
+ * correto (timestamp em ms, UTC), independente do fuso de quem acessa o site.
+ *
+ * `month` é 1–12 (e não 0–11 como no `Date`). `hour` aceita 24 para dizer
+ * "fim do dia": a virada para o dia seguinte é resolvida automaticamente.
+ */
+export function instantFromZonedTime(
+  year: number,
+  month: number,
+  day: number,
+  hour = 0,
+  minute = 0,
+  timeZone: string = weddingConfig.wedding.timezone,
+): number {
+  const naiveUtc = Date.UTC(year, month - 1, day, hour, minute, 0);
+
+  // Duas passagens resolvem corretamente as bordas de horário de verão.
+  let instant = naiveUtc - timeZoneOffsetMs(naiveUtc, timeZone);
+  instant = naiveUtc - timeZoneOffsetMs(instant, timeZone);
+
+  return instant;
+}
+
+/** Partes da data do casamento (`month` de 1 a 12), lidas da configuração. */
+export function getWeddingDateParts(): { year: number; month: number; day: number } {
+  const [year, month, day] = weddingConfig.wedding.date.split("-").map(Number);
+  return { year: year ?? 1970, month: month ?? 1, day: day ?? 1 };
+}
+
+/**
  * Converte "2027-08-21" + "16:00" + "America/Sao_Paulo" no instante correto
  * (timestamp em ms, UTC), independente do fuso de quem acessa o site.
  */
 export function getWeddingTimestamp(): number {
-  const { date, time, timezone } = weddingConfig.wedding;
+  const { year, month, day } = getWeddingDateParts();
+  const [hour, minute] = weddingConfig.wedding.time.split(":").map(Number);
 
-  const [year, month, day] = date.split("-").map(Number);
-  const [hour, minute] = time.split(":").map(Number);
-
-  const naiveUtc = Date.UTC(year ?? 1970, (month ?? 1) - 1, day ?? 1, hour ?? 0, minute ?? 0, 0);
-
-  // Duas passagens resolvem corretamente as bordas de horário de verão.
-  let instant = naiveUtc - timeZoneOffsetMs(naiveUtc, timezone);
-  instant = naiveUtc - timeZoneOffsetMs(instant, timezone);
-
-  return instant;
+  return instantFromZonedTime(year, month, day, hour ?? 0, minute ?? 0);
 }
 
 export function getWeddingDate(): Date {
@@ -127,4 +149,35 @@ export function formatTime(time: string): string {
 /** Data ISO completa, para o atributo `dateTime` do HTML semântico. */
 export function weddingIsoString(): string {
   return getWeddingDate().toISOString();
+}
+
+/**
+ * Formata um instante qualquer no fuso do casamento — assim o texto é o mesmo
+ * para quem acessa de São Paulo, de Lisboa ou do celular com fuso errado.
+ *
+ * `formatInstant(abertura, { day: "numeric", month: "long" })` → "21 de agosto"
+ */
+export function formatInstant(
+  instant: number,
+  options: Intl.DateTimeFormatOptions = { day: "numeric", month: "long" },
+): string {
+  return new Intl.DateTimeFormat("pt-BR", {
+    timeZone: weddingConfig.wedding.timezone,
+    ...options,
+  }).format(new Date(instant));
+}
+
+/** "00h" ou "06h30" — hora de um instante, no fuso do casamento. */
+export function formatInstantHour(instant: number): string {
+  const parts = new Intl.DateTimeFormat("pt-BR", {
+    timeZone: weddingConfig.wedding.timezone,
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  })
+    .format(new Date(instant))
+    .split(":");
+
+  const [hour, minute] = parts;
+  return !minute || minute === "00" ? `${hour}h` : `${hour}h${minute}`;
 }

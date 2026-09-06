@@ -7,8 +7,14 @@ import { AdminLogin } from "@/components/admin/AdminLogin";
 import { AdminDashboard, type AdminData } from "@/components/admin/AdminDashboard";
 import { AdminLogout } from "@/components/admin/AdminLogout";
 import { isAdminAuthenticated, isAdminEnabled, isAdminPath } from "@/lib/admin/auth";
+import { guestPhotoPublicUrl } from "@/lib/guest-photos/storage";
 import { getSupabaseAdminClient } from "@/lib/supabase/server";
-import type { GiftPaymentRow, GuestMessageRow, GuestRow } from "@/lib/supabase/types";
+import type {
+  GiftPaymentRow,
+  GuestMessageRow,
+  GuestPhotoRow,
+  GuestRow,
+} from "@/lib/supabase/types";
 
 export const metadata: Metadata = {
   title: "Painel",
@@ -23,7 +29,7 @@ async function loadData(): Promise<AdminData | null> {
   const supabase = getSupabaseAdminClient();
   if (!supabase) return null;
 
-  const [guests, messages, giftPayments] = await Promise.all([
+  const [guests, messages, giftPayments, guestPhotos] = await Promise.all([
     supabase.from("guests").select("*").order("created_at", { ascending: false }).limit(500),
     supabase
       .from("guest_messages")
@@ -35,12 +41,28 @@ async function loadData(): Promise<AdminData | null> {
       .select("*")
       .order("created_at", { ascending: false })
       .limit(500),
+    // Inclui as escondidas: o painel é justamente onde o casal reverte isso.
+    supabase
+      .from("guest_photos")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(600),
   ]);
 
   return {
     guests: (guests.data ?? []) as GuestRow[],
     messages: (messages.data ?? []) as GuestMessageRow[],
     giftPayments: (giftPayments.data ?? []) as GiftPaymentRow[],
+    // A URL é montada aqui, no servidor, para o painel receber a foto pronta.
+    guestPhotos: ((guestPhotos.data ?? []) as GuestPhotoRow[]).map((row) => ({
+      id: row.id,
+      url: guestPhotoPublicUrl(row.storage_path),
+      storagePath: row.storage_path,
+      guestName: row.guest_name,
+      caption: row.caption,
+      createdAt: row.created_at,
+      approved: row.approved,
+    })),
   };
 }
 

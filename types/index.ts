@@ -70,6 +70,79 @@ export type TimelineEvent = {
 };
 
 // ---------------------------------------------------------------------------
+// Galeria
+// ---------------------------------------------------------------------------
+
+/** Uma foto exibida na galeria, venha ela do casal ou de um convidado. */
+export type GalleryPhoto = {
+  src: string;
+  alt: string;
+  /** Nome de quem enviou. Preenchido só nas fotos dos convidados. */
+  credit?: string;
+};
+
+// ---------------------------------------------------------------------------
+// Fotos enviadas pelos convidados
+// ---------------------------------------------------------------------------
+
+/** Como o envio de fotos é liberado. Veja `weddingConfig.guestPhotos.mode`. */
+export type GuestPhotoMode = "auto" | "aberto" | "fechado";
+
+export type GuestPhotosConfig = {
+  mode: GuestPhotoMode;
+  /** Hora do dia do casamento em que o envio abre (0–23). */
+  opensAtHour: number;
+  /** Dias após o casamento em que o envio fecha. */
+  closesDaysAfter: number;
+  /** Máximo de fotos por envio. */
+  maxPerUpload: number;
+  /** Exige aprovação do casal antes de a foto aparecer na galeria. */
+  requireApproval: boolean;
+};
+
+/** Estado do envio de fotos no momento da renderização. */
+export type GuestPhotoWindowState =
+  /** Funcionalidade desligada em `features.guestPhotos`. */
+  | "desligado"
+  /** Ainda não chegou o dia. */
+  | "antes"
+  /** Pode enviar agora. */
+  | "aberto"
+  /** O prazo passou. */
+  | "encerrado";
+
+export type GuestPhotoWindow = {
+  state: GuestPhotoWindowState;
+  /** Instante (ms) de abertura. Null quando o estado foi forçado na config. */
+  opensAt: number | null;
+  /** Instante (ms) de fechamento. Null quando o estado foi forçado na config. */
+  closesAt: number | null;
+};
+
+/** Registro de uma foto de convidado, como vem do banco. */
+export type GuestPhoto = {
+  id: string;
+  created_at: string;
+  /** Caminho do arquivo no bucket `fotos-convidados`. */
+  storage_path: string;
+  /** Null quando o convidado preferiu não se identificar. */
+  guest_name: string | null;
+  caption: string | null;
+  approved: boolean;
+};
+
+/** Foto de convidado já pronta para o painel do casal (com URL montada). */
+export type AdminGuestPhoto = {
+  id: string;
+  url: string;
+  storagePath: string;
+  guestName: string | null;
+  caption: string | null;
+  createdAt: string;
+  approved: boolean;
+};
+
+// ---------------------------------------------------------------------------
 // Locais
 // ---------------------------------------------------------------------------
 

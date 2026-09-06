@@ -1,4 +1,9 @@
-import type { TimelineEvent, WeddingVenue } from "@/types";
+import type {
+  GuestPhotoMode,
+  GuestPhotosConfig,
+  TimelineEvent,
+  WeddingVenue,
+} from "@/types";
 
 /**
  * CONFIGURAÇÃO CENTRAL DO CASAMENTO
@@ -134,11 +139,64 @@ export const weddingConfig = {
     gifts: true,
     rsvp: true,
     gallery: true,
+    /** Envio de fotos pelos convidados no dia do casamento (veja `guestPhotos`). */
+    guestPhotos: true,
     guestMessages: true,
     usefulInfo: true,
     music: false,
     easterEggs: true,
   },
+
+  // -------------------------------------------------------------------------
+  // Fotos dos convidados — o "álbum coletivo" do dia
+  //
+  // No dia do casamento a página /galeria libera um botão para os convidados
+  // enviarem as fotos que tiraram. Elas entram na mesma galeria, junto com as
+  // fotos do casal, e ficam salvas no Supabase (tabela `guest_photos` + bucket
+  // `fotos-convidados`).
+  //
+  // ⚠️ Precisa da migration `supabase/migrations/0004_guest_photos.sql`
+  //    aplicada no banco. Sem ela, o envio responde erro.
+  // -------------------------------------------------------------------------
+  guestPhotos: {
+    /**
+     * Quando o envio fica disponível:
+     *  - "auto"    → abre e fecha sozinho, pelas regras de data abaixo.
+     *                Use esta opção no dia a dia.
+     *  - "aberto"  → força aberto agora (útil para TESTAR antes do casamento).
+     *  - "fechado" → força fechado, sem mexer nas datas.
+     *
+     * O `as GuestPhotoMode` existe porque este arquivo é `as const`: sem ele, o
+     * TypeScript trataria o valor como "auto para sempre" e acusaria erro em
+     * quem compara com as outras opções.
+     */
+    mode: "auto" as GuestPhotoMode,
+
+    /**
+     * Hora do dia do casamento em que o envio abre (fuso de `wedding.timezone`).
+     * 0 = meia-noite do próprio dia. Use 6 para abrir só de manhã, por exemplo.
+     */
+    opensAtHour: 0,
+
+    /**
+     * Quantos dias depois do casamento o envio continua aberto. O fechamento
+     * acontece no fim do último dia. 7 = uma semana para todos mandarem as
+     * fotos com calma (muita gente só lembra no dia seguinte).
+     */
+    closesDaysAfter: 7,
+
+    /** Quantas fotos o convidado pode selecionar de uma vez. */
+    maxPerUpload: 10,
+
+    /**
+     * true  → a foto só aparece na galeria depois do casal aprovar no painel.
+     * false → aparece na hora (o painel continua podendo esconder/excluir).
+     *
+     * Deixamos false de propósito: a graça é ver o álbum crescer durante a
+     * festa. Se preferir revisar antes, troque para true.
+     */
+    requireApproval: false,
+  } satisfies GuestPhotosConfig,
 
   // -------------------------------------------------------------------------
   // Analytics (não injeta script nenhum enquanto `enabled` for false)
@@ -256,10 +314,11 @@ export const usefulInfo = {
     {
       icon: "🚗",
       title: "Estacionamento",
-      description: "Estacionamento gratuito no próprio local, sem manobrista.",
+      description: "Estacionamento gratuito no próprio local.",
       details: [
         "São cerca de 50 vagas, suficientes para todos os convidados.",
         "A entrada é por uma via única, então reserve alguns minutos extras na chegada.",
+        "Terá pessoas auxiliando no estacionamento.",
       ],
     },
     {
@@ -281,7 +340,7 @@ export const usefulInfo = {
         "Os lugares são contados um a um, logo convidado não convida.",
         "Deixe o celular no silencioso durante a cerimônia.",
         "Evite circular ou entrar no caminho dos fotógrafos: pode estragar os registros.",
-        "Presete atenção na cerimônia.",
+        "Preste atenção na cerimônia.",
       ],
     },
     {

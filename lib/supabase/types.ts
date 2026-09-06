@@ -72,6 +72,29 @@ export type GiftPaymentInsert = Omit<GiftPaymentRow, "id" | "created_at" | "conf
   confirmed?: boolean;
 };
 
+/**
+ * Fotos enviadas pelos próprios convidados no dia do casamento.
+ * O arquivo vive no bucket público `fotos-convidados`; aqui fica só o caminho.
+ */
+export type GuestPhotoRow = {
+  id: string;
+  created_at: string;
+  storage_path: string;
+  /** Null quando o convidado preferiu não se identificar. */
+  guest_name: string | null;
+  caption: string | null;
+  /** Visível na galeria pública. */
+  approved: boolean;
+  width: number | null;
+  height: number | null;
+  byte_size: number | null;
+  mime_type: string | null;
+};
+
+export type GuestPhotoInsert = Omit<GuestPhotoRow, "id" | "created_at" | "approved"> & {
+  approved?: boolean;
+};
+
 export type Database = {
   public: {
     Tables: {
@@ -97,6 +120,12 @@ export type Database = {
         Row: GiftPaymentRow;
         Insert: GiftPaymentInsert;
         Update: Partial<GiftPaymentRow>;
+        Relationships: [];
+      };
+      guest_photos: {
+        Row: GuestPhotoRow;
+        Insert: GuestPhotoInsert;
+        Update: Partial<GuestPhotoRow>;
         Relationships: [];
       };
     };

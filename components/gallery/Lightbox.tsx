@@ -4,7 +4,12 @@ import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { Portal } from "@/components/ui/Portal";
 
-export type LightboxImage = { src: string; alt: string };
+export type LightboxImage = {
+  src: string;
+  alt: string;
+  /** Nome de quem enviou. Só as fotos dos convidados têm crédito. */
+  credit?: string;
+};
 
 type LightboxProps = {
   images: LightboxImage[];
@@ -91,6 +96,9 @@ export function Lightbox({ images, index, onClose, onNavigate }: LightboxProps) 
           </span>
           <span className="mx-2 opacity-40">·</span>
           {current.alt}
+          {current.credit ? (
+            <span className="mt-1 block text-bordo-200">foto de {current.credit}</span>
+          ) : null}
         </figcaption>
       </figure>
 

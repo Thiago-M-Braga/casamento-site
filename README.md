@@ -107,6 +107,7 @@ de componente. Tudo mora em `config/`.
 | Velocidade da rolagem suave                      | `config/theme.ts` → `scroll.duration` |
 | Endereço do painel (`/adm/2329`)                 | `config/wedding.ts` → `admin.secretPath` |
 | Ligar/desligar seções (presentes, RSVP, galeria) | `config/wedding.ts` → `features` |
+| Envio de fotos pelos convidados no dia           | `config/wedding.ts` → `guestPhotos` |
 | Lista de presentes e valores                     | `config/gifts.ts`       |
 | Cores, fontes, sombras, espaçamentos             | `config/theme.ts`       |
 | Itens do menu                                    | `config/navigation.ts`  |
@@ -356,8 +357,13 @@ Necessário para **persistir** o RSVP e as mensagens.
 | `guests`         | Confirmações de presença                              |
 | `guest_messages` | Mural de recados (`approved = false` por padrão)      |
 | `gift_payments`  | Presentes comprados, avisados pelos próprios convidados |
+| `guest_photos`   | Fotos que os convidados enviam no dia do casamento    |
 | `gifts`          | Opcional — a lista vive em `config/gifts.ts`          |
 | `payments`       | Legado, sem uso — era do webhook do Mercado Pago      |
+
+Buckets do Storage: `comprovantes` (**privado**, aberto por URL assinada no
+painel) e `fotos-convidados` (**público**, porque as fotos são exibidas na
+galeria).
 
 ### Row Level Security
 
@@ -370,6 +376,43 @@ O RLS fica **ligado em todas as tabelas** (`0002_rls.sql`). O visitante público
 As escritas passam pelos Route Handlers (`app/api/…`) usando a service role key,
 que só existe no servidor. Assim toda gravação passa por validação, sanitização
 e rate limiting.
+
+### Fotos dos convidados (álbum coletivo)
+
+No dia do casamento a página `/galeria` libera um botão para os convidados
+enviarem as fotos que tiraram. Elas entram na mesma galeria, com o crédito de
+quem mandou, e o casal pode esconder ou apagar qualquer uma pelo painel.
+
+**Para funcionar, aplique a migration `0004_guest_photos.sql`.** Ela cria a
+tabela `guest_photos`, as políticas de RLS e o bucket público
+`fotos-convidados`. Sem ela, o envio responde erro e a galeria continua
+mostrando apenas as fotos de `config/wedding.ts`.
+
+Os ajustes ficam em `config/wedding.ts` → `guestPhotos`:
+
+```ts
+guestPhotos: {
+  mode: "auto",          // "aberto" força liberado (para testar) · "fechado" esconde
+  opensAtHour: 0,        // hora do dia do casamento em que abre (0 = meia-noite)
+  closesDaysAfter: 7,    // segue aberto por 7 dias depois da festa
+  maxPerUpload: 10,      // fotos por envio
+  requireApproval: false, // true = só aparece depois do casal aprovar
+},
+```
+
+Para **testar antes do casamento**, troque `mode` para `"aberto"` — e não esqueça
+de voltar para `"auto"` depois. Desligar de vez: `features.guestPhotos: false`.
+
+Detalhes que valem saber:
+
+- a foto é **reduzida no próprio celular** antes de subir (máx. 2000 px, JPEG),
+  então gasta pouca internet no salão;
+- os metadados originais são descartados no processo, **inclusive a localização
+  GPS** — ninguém publica sem querer onde estava;
+- cada foto vai numa requisição separada, então uma que falhe não derruba as
+  outras e pode ser reenviada;
+- fora da janela de envio, quem tentar chamar a API direto recebe erro: a data é
+  conferida no servidor, não só na tela.
 
 ---
 
@@ -440,11 +483,14 @@ Sem `ADMIN_PASSWORD` o painel fica **desabilitado** e não mostra dado nenhum.
 ### O que o painel mostra
 
 - **Números**: respostas, confirmados, recusados, pessoas esperadas (adultos e
-  crianças), presentes comprados, valor declarado, valor conferido e
-  mensagens pendentes.
+  crianças), presentes comprados, valor declarado, valor conferido, mensagens
+  pendentes e fotos enviadas pelos convidados.
 - **Presentes comprados**: cada aviso enviado pelos convidados, com nome (ou
   "Anônimo"), valor, forma de pagamento, recado, link para o comprovante e um
   checkbox **Conferido** para marcar o que já bateu com o extrato.
+- **Fotos dos convidados**: o álbum coletivo do dia. **Esconder** tira a foto da
+  galeria pública na hora (e dá para desfazer); **Excluir** apaga o arquivo de
+  vez.
 - **Confirmações**: a lista completa do RSVP, com acompanhantes, contato e
   observações.
 - **Mensagens**: o mural, com o status de moderação.
@@ -530,13 +576,13 @@ components/
 ├── gifts/              Cards, grade, filtros, modal de pagamento
 ├── rsvp/               Formulário e tela de sucesso
 ├── messages/           Mural de recados
-├── gallery/            Grid e lightbox
-└── admin/              Login e dashboard
+├── gallery/            Grid, lightbox e envio de fotos dos convidados
+└── admin/              Login, dashboard e moderação das fotos
 
 config/                 wedding.ts · gifts.ts · theme.ts · navigation.ts
-lib/                    supabase/ · payments/ · utils/ · validations/ · admin/
+lib/                    supabase/ · guest-photos/ · utils/ · validations/ · admin/
 types/                  Tipos compartilhados
-supabase/migrations/    SQL (tabelas + RLS)
+supabase/migrations/    SQL (tabelas + RLS + buckets)
 public/images/          Fotos, organizadas por seção
 ```
 
@@ -568,8 +614,11 @@ public/images/          Fotos, organizadas por seção
 - [ ] Links de pagamento dos presentes testados
 - [ ] Imagens substituídas em `public/images/`
 - [ ] Supabase configurado e um RSVP de teste aparecendo na tabela `guests`
-- [ ] Migrations aplicadas: `0001`, `0002` (RLS) e `0003` (presentes comprados)
+- [ ] Migrations aplicadas: `0001`, `0002` (RLS), `0003` (presentes comprados) e
+      `0004` (fotos dos convidados)
 - [ ] Aviso de presente testado, com e sem comprovante, e visível em `/adm/2329`
+- [ ] Envio de fotos testado com `guestPhotos.mode: "aberto"` — e `mode` de volta
+      para `"auto"` antes de publicar
 - [ ] `NEXT_PUBLIC_SITE_URL` com o domínio final
 - [ ] `npm run build` passando sem erros
 - [ ] Testado em celular de verdade (o link vai circular no WhatsApp)

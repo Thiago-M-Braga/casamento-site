@@ -10,6 +10,7 @@ import { Hero } from "@/components/sections/Hero";
 import { WeddingDetails } from "@/components/sections/WeddingDetails";
 import { UsefulInfo } from "@/components/sections/UsefulInfo";
 import { Gallery } from "@/components/gallery/Gallery";
+import { GuestPhotoHomeLink } from "@/components/gallery/GuestPhotoHomeLink";
 import { GiftGrid } from "@/components/gifts/GiftGrid";
 
 import { galleryImages, storyContent, usefulInfo, weddingConfig } from "@/config/wedding";
@@ -175,7 +176,11 @@ export default function HomePage() {
 
           <Gallery images={[...galleryImages]} limit={7} />
 
-          <div className="mt-12 text-center">
+          <div className="mt-12 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            {/* Só aparece no dia do casamento, e apenas no navegador — a home é
+                estática, então o servidor não sabe se a janela está aberta. */}
+            <GuestPhotoHomeLink />
+
             <ButtonLink href="/galeria" variant="outline">
               Ver todas as fotos
             </ButtonLink>
