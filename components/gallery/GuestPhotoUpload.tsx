@@ -286,8 +286,7 @@ export function GuestPhotoUpload({ onUploaded, onClose }: GuestPhotoUploadProps)
       <Honeypot />
 
       <p className="text-sm leading-relaxed text-ink-soft">
-        Escolha até {MAX_PER_UPLOAD} fotos por vez. Elas são reduzidas aqui no seu celular antes de
-        subir, então gasta pouca internet.
+        Escolha até {MAX_PER_UPLOAD} fotos por vez.
       </p>
 
       {/* ----------------------------------------------------------------- */}
@@ -468,9 +467,7 @@ export function GuestPhotoUpload({ onUploaded, onClose }: GuestPhotoUploadProps)
       {feedback ? <FormFeedback tone="error">{feedback}</FormFeedback> : null}
 
       <p className="text-xs leading-relaxed text-ink-muted">
-        As fotos entram na galeria pública do site, onde qualquer convidado pode ver. A localização
-        registrada pela câmera é removida antes do envio. O casal pode esconder ou apagar qualquer
-        foto.
+        As fotos entram na galeria pública do site, onde qualquer convidado pode ver.
       </p>
 
       <div className="mt-1 flex flex-col gap-2 sm:flex-row-reverse">
